@@ -7,21 +7,42 @@ import { TaskList } from "./TaskList";
 import { ProgressBar } from "./ProgressBar";
 import { TodoList } from "./TodoList";
 import { TodoModal } from "./TodoModal";
+import { Button, ButtonGroup } from "flowbite-react";
+import { HiPlusCircle } from "react-icons/hi";
+import type { TaskProgress } from "../../types/TaskProgress";
+
 export function Users() {
 
     const [todos, setTodos] = useState<Todo[]>(TodoData.todos);
-    const [progress, setProgress] = useState<number>();
     const [openModal, setOpenModal] = useState(false);
     const [modalAction, setModalAction] = useState("edit");
     const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
+    const [progressTasks, setProgressTasks] = useState<TaskProgress>({
+        create: false,
+        edit: false,
+        delete: false,
+    });
+
+    const [progressPercent, setProgressTasksPercent] = useState<number>(0)
+
+    const completeTask = (task: keyof TaskProgress) => {
+        setProgressTasks(prev => ({
+            ...prev,
+            [task]: true,
+        }))
+    };
+
     useEffect(() => {
-        console.log(todos);
 
-    }, [todos])
+        const total = Object.keys(progressTasks).length; // 3
+        const done = Object.values(progressTasks).filter(v => v).length;
+        setProgressTasksPercent(done / total * 100);
+
+    }, [progressTasks])
 
 
-    const handleCompletedTask = (id: number) => {
+    const handleCompletedTodo = (id: number) => {
         setTodos(prev =>
             prev.map(t =>
                 t.id === id
@@ -37,6 +58,7 @@ export function Users() {
         setSelectedTodo(todo);
         setModalAction("edit");
         setOpenModal(true);
+
     };
 
     const handleDeleteTask = (todo: Todo) => {
@@ -54,24 +76,35 @@ export function Users() {
             )
         );
         setOpenModal(false);
+        completeTask("edit");
         setSelectedTodo(null);
+
     };
 
 
     const onConfirmDelete = () => {
         setTodos(prev => prev.filter(t => t.id !== selectedTodo?.id));
         setOpenModal(false);
+        completeTask("delete");
         setSelectedTodo(null);
     };
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col justify-center gap-6">
             <h1>Hola usuarios</h1>
-            <TaskList></TaskList>
-            <ProgressBar></ProgressBar>
+
+            <TaskList tasks={progressTasks}></TaskList>
+            <ProgressBar progressPercent={progressPercent}></ProgressBar>
+
+            <ButtonGroup>
+                <Button color="alternative">
+                    <HiPlusCircle className="me-2 h-4 w-4" />
+                    Add TODO
+                </Button>
+            </ButtonGroup>
             <TodoList
                 Todos={todos}
-                handleCompletedTask={handleCompletedTask}
+                handleCompletedTask={handleCompletedTodo}
                 handleEditTask={handleEditTask}
                 handleDeleteTask={handleDeleteTask}
             ></TodoList>

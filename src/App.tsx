@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { MainLayout } from "./layout/MainLayout"
 import { Home } from "./components/homepage/Home";
 import { Heuristics } from "./components/1heuristica/Heuristics";
-import { Users } from "./components/2pruebas/Users"
+import { Users } from "./components/2pruebas/UsersPage"
 import { Models } from "./components/3modelos/Models";
 import { Roads } from "./components/4recorridos/Roads";
 import { Subjective } from "./components/5subjetiva/Subjective";

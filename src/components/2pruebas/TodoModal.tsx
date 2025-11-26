@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Button, Checkbox, Label, Modal, ModalBody, ModalHeader, TextInput } from "flowbite-react";
+import { Button, Label, Modal, ModalBody, ModalHeader, TextInput } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import type { Todo } from "../../types/Todo";
 type Props = {
@@ -14,7 +14,6 @@ type Props = {
 
 export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmEdit, onConfirmDelete }: Props) {
     const nameInputRef = useRef<HTMLInputElement>(null);
-    const [newTodo, setNewTodo] = useState<Todo | null>(null);
 
     const [editModalData, setEditModalData] = useState({
         name: "",

@@ -1,12 +1,17 @@
 
 import { Progress } from "flowbite-react";
-export function ProgressBar() {
+
+type Props = {
+    progressPercent: number;
+}
+
+export function ProgressBar({ progressPercent }: Props) {
 
     return (
         <Progress
-            progress={45}
-            progressLabelPosition="inside"
-            textLabel="Flowbite"
+            progress={progressPercent}
+            progressLabelPosition="outside"
+            textLabel="Progreso"
             textLabelPosition="outside"
             size="lg"
             labelProgress
