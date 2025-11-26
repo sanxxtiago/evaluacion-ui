@@ -1,0 +1,39 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "name": "Revisar correos",
+      "description": "Leer los mensajes pendientes de la mañana",
+      "date": "2025-11-26",
+      "state": "pendiente"
+    },
+    {
+      "id": 2,
+      "name": "Preparar reunión",
+      "description": "Organizar los puntos para la reunión semanal",
+      "date": "2025-11-27",
+      "state": "pendiente"
+    },
+    {
+      "id": 3,
+      "name": "Actualizar reporte",
+      "description": "Agregar los datos nuevos al informe mensual",
+      "date": "2025-11-28",
+      "state": "pendiente"
+    },
+    {
+      "id": 4,
+      "name": "Enviar documentación",
+      "description": "Mandar archivos solicitados por el cliente",
+      "date": "2025-11-29",
+      "state": "completado"
+    },
+    {
+      "id": 5,
+      "name": "Respaldar proyecto",
+      "description": "Hacer copia de seguridad del código",
+      "date": "2025-11-30",
+      "state": "pendiente"
+    }
+  ]
+}
