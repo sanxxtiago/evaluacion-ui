@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button, Checkbox, Label, Modal, ModalBody, ModalHeader, TextInput } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import type { Todo } from "../../types/Todo";
@@ -9,57 +9,87 @@ type Props = {
     openModal?: boolean
     setOpenModal(openModal: boolean): void;
     onConfirmDelete(): void;
-    onConfirmEdit(): void;
+    onConfirmEdit(newTodo: Todo | null): void;
 }
 
 export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmEdit, onConfirmDelete }: Props) {
-    const emailInputRef = useRef<HTMLInputElement>(null);
+    const nameInputRef = useRef<HTMLInputElement>(null);
+    const [newTodo, setNewTodo] = useState<Todo | null>(null);
 
-    if (action === "edit")
+    const [editModalData, setEditModalData] = useState({
+        name: "",
+        description: "",
+        date: "",
+        state: "",
+    });
+
+    useEffect(() => {
+        if (todo) {
+            setEditModalData({
+                name: todo.name,
+                description: todo.description,
+                date: todo.date,
+                state: todo.state,
+            });
+        }
+    }, [todo]);
+
+    if (action === "edit") {
+
+        const handleConfirmEdit = () => {
+            const updatedTodo = { ...todo, ...editModalData };
+            onConfirmEdit(updatedTodo);
+        };
+
         return (
 
             <>
-                <Modal show={openModal} size="md" popup onClose={() => setOpenModal(false)} initialFocus={emailInputRef}>
+                <Modal show={openModal} size="md" popup onClose={() => setOpenModal(false)} initialFocus={nameInputRef}>
                     <ModalHeader />
                     <ModalBody>
                         <div className="space-y-6">
-                            <h3 className="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="email">Your email</Label>
-                                </div>
-                                <TextInput id="email" ref={emailInputRef} placeholder="name@company.com" required />
-                            </div>
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="password">Your password</Label>
-                                </div>
-                                <TextInput id="password" type="password" required />
-                            </div>
-                            <div className="flex justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Checkbox id="remember" />
-                                    <Label htmlFor="remember">Remember me</Label>
-                                </div>
-                                <a href="#" className="text-sm text-primary-700 hover:underline dark:text-primary-500">
-                                    Lost Password?
-                                </a>
-                            </div>
-                            <div className="w-full">
-                                <Button onClick={onConfirmEdit}>Confirmar</Button>
-                            </div>
-                            <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
-                                Not registered?&nbsp;
-                                <a href="#" className="text-primary-700 hover:underline dark:text-primary-500">
-                                    Create account
-                                </a>
-                            </div>
+                            {todo && (
+                                <>
+                                    <h3 className="text-xl font-medium text-gray-900 dark:text-white">Editar: {todo.name}</h3>
+                                    <div>
+                                        <div className="mb-2 block">
+                                            <Label htmlFor="name">Nombre</Label>
+                                        </div>
+                                        <TextInput id="name" ref={nameInputRef} placeholder={todo.name} required onChange={(e) =>
+                                            setEditModalData(prev => ({ ...prev, name: e.target.value }))
+                                        } />
+                                    </div>
+                                    <div>
+                                        <div className="mb-2 block">
+                                            <Label htmlFor="description">Descripción</Label>
+                                        </div>
+                                        <TextInput id="description" placeholder={todo.description} required onChange={(e) =>
+                                            setEditModalData(prev => ({ ...prev, description: e.target.value }))
+                                        } />
+                                    </div>
+                                    <div>
+                                        <div className="mb-2 block">
+                                            <Label htmlFor="fecha">Fecha</Label>
+                                        </div>
+                                        <TextInput id="fecha" placeholder={todo.date} required onChange={(e) =>
+                                            setEditModalData(prev => ({ ...prev, date: e.target.value }))
+                                        } />
+                                    </div>
+
+                                    <div className="flex justify-center w-full gap-3">
+                                        <Button onClick={handleConfirmEdit}>Guardar</Button>
+                                        <Button color="alternative" onClick={() => setOpenModal(false)}>Cancelar</Button>
+                                    </div>
+                                </>
+                            )}
+
                         </div>
                     </ModalBody>
                 </Modal>
             </>
         );
-    if (action === "delete") {
+    }
+    else if (action === "delete") {
 
         return (
             <>
@@ -77,10 +107,10 @@ export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmEdit
 
                             <div className="flex justify-center gap-4">
                                 <Button color="red" onClick={onConfirmDelete}>
-                                    Yes, I'm sure
+                                    Sí, estoy seguro
                                 </Button>
                                 <Button color="alternative" onClick={() => setOpenModal(false)}>
-                                    No, cancel
+                                    No, cancelar
                                 </Button>
                             </div>
                         </div>
@@ -88,5 +118,8 @@ export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmEdit
                 </Modal>
             </>
         );
+    }
+    else {
+        return (<></>)
     }
 }

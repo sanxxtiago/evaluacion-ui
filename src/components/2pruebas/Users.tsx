@@ -47,17 +47,22 @@ export function Users() {
         setOpenModal(true);
     };
 
-    const onConfirmEdit = () => {
+    const onConfirmEdit = (updatedTodo: Todo) => {
+        setTodos(prev =>
+            prev.map(t =>
+                t.id === updatedTodo.id ? updatedTodo : t
+            )
+        );
         setOpenModal(false);
-    }
+        setSelectedTodo(null);
+    };
+
 
     const onConfirmDelete = () => {
         setTodos(prev => prev.filter(t => t.id !== selectedTodo?.id));
         setOpenModal(false);
         setSelectedTodo(null);
-    }
-
-
+    };
 
     return (
         <div className="flex flex-col gap-6">

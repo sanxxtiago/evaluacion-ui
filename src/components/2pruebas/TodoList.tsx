@@ -39,10 +39,8 @@ export function TodoList({ Todos, handleCompletedTask, handleEditTask, handleDel
                                 <TableCell>{t.date}</TableCell>
                                 <TableCell>{t.state}</TableCell>
                                 <TableCell className="flex gap-3">
-                                    {t.state === "pendiente" && (
-                                        <Button size="xs" onClick={() => handleEditTask?.(t)}>Editar</Button>
-                                    )}
-                                    <Button size="xs" onClick={() => handleDeleteTask?.(t)}>Borrar</Button>
+                                    <Button size="xs" disabled={t.state !== "pendiente"} onClick={() => handleEditTask?.(t)}>Editar</Button>
+                                    <Button size="xs" color="red" onClick={() => handleDeleteTask?.(t)}>Borrar</Button>
 
                                 </TableCell>
                                 <TableCell className="content-center justify-center">
