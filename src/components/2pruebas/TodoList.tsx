@@ -30,8 +30,7 @@ export function TodoList({ Todos, handleCompletedTask, handleEditTask, handleDel
                 <TableBody className="divide-y">
                     {
                         Todos.map(t => (
-                            <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-
+                            <TableRow key={t.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                 <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {t.name}
                                 </TableCell>
