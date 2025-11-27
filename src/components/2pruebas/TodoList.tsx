@@ -8,12 +8,13 @@ type Props = {
     handleCompletedTask?: (id: number) => void;
     handleEditTask?: (todo: Todo) => void;
     handleDeleteTask?: (todo: Todo) => void;
+    disabled?: boolean;
 }
 
-export function TodoList({ Todos, handleCompletedTask, handleEditTask, handleDeleteTask }: Props) {
+export function TodoList({ Todos, handleCompletedTask, handleEditTask, handleDeleteTask, disabled }: Props) {
 
     return (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto  shadow-xl shadow-black">
             <Table hoverable>
                 <TableHead>
                     <TableRow>
@@ -23,7 +24,7 @@ export function TodoList({ Todos, handleCompletedTask, handleEditTask, handleDel
                         <TableHeadCell>Estado</TableHeadCell>
                         <TableHeadCell>Acciones</TableHeadCell>
                         <TableHeadCell className="flex flex-row p-4 gap-1">
-                            Completada ✔
+                            Completada
                         </TableHeadCell>
                     </TableRow>
                 </TableHead>
@@ -38,12 +39,13 @@ export function TodoList({ Todos, handleCompletedTask, handleEditTask, handleDel
                                 <TableCell>{t.date}</TableCell>
                                 <TableCell>{t.state}</TableCell>
                                 <TableCell className="flex gap-3">
-                                    <Button size="xs" disabled={t.state !== "pendiente"} onClick={() => handleEditTask?.(t)}>Editar</Button>
-                                    <Button size="xs" color="red" onClick={() => handleDeleteTask?.(t)}>Borrar</Button>
+                                    <Button size="xs" disabled={typeof disabled === "boolean" ? disabled : t.state !== "pendiente"} onClick={() => handleEditTask?.(t)}>Editar</Button>
+                                    <Button size="xs" disabled={disabled} color="red" onClick={() => handleDeleteTask?.(t)}>Borrar</Button>
 
                                 </TableCell>
                                 <TableCell className="content-center justify-center">
                                     <Checkbox
+                                        disabled={disabled}
                                         checked={t.state === "completado"}
                                         onChange={() => handleCompletedTask?.(t.id)}
                                     />

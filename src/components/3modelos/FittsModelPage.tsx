@@ -3,15 +3,17 @@
 import { useEffect, useState } from "react";
 import TodoData from "../../resources/json/TODO.json";
 import type { Todo } from "../../types/Todo";
-import { TaskList } from "./TaskList";
-import { ProgressBar } from "./ProgressBar";
-import { TodoList } from "./TodoList";
-import { TodoModal } from "./TodoModal";
+import { PredictiveTaskList } from "./PredictiveTaskList";
+import { ProgressBar } from "../2pruebas/ProgressBar";
+import { TodoList } from "../2pruebas/TodoList";
+import { TodoModal } from "../2pruebas/TodoModal";
 import { Button, ButtonGroup, Spinner } from "flowbite-react";
 import { HiPlusCircle } from "react-icons/hi";
 import type { TaskProgress } from "../../types/TaskProgress";
+import type { FittsTaskProgress } from "../../types/FittsTaskProgress";
+import { TaskList } from "../2pruebas/TaskList";
 
-export function Users() {
+export function FittsModelPage() {
 
     const [todos, setTodos] = useState<Todo[]>(TodoData.todos);
     const [openModal, setOpenModal] = useState(false);
@@ -21,10 +23,12 @@ export function Users() {
     const [showFinalScreen, setShowFinalScreen] = useState(false);
     const [loadingFinish, setLoadingFinish] = useState(false);
 
-    const [progressTasks, setProgressTasks] = useState<TaskProgress>({
-        create: false,
-        edit: false,
-        delete: false,
+    const [progressTasks, setProgressTasks] = useState<FittsTaskProgress>({
+        addButton: false,
+        inputName: false,
+        inputDescription: false,
+        inputDate: false,
+        createButton: false,
     });
 
     const [progressPercent, setProgressTasksPercent] = useState<number>(0)
@@ -32,15 +36,32 @@ export function Users() {
     // métricas
     const [clicks, setClicks] = useState(0);
     const [errors, setErrors] = useState(0);
-    const [startTime] = useState(Date.now());
+    const [startTime, setStartTime] = useState<number | null>(null);
     const [finishTime, setFinishTime] = useState<number | null>(null);
 
-    const completeTask = (task: keyof TaskProgress) => {
+    // simulación
+    const [simulationRunning, setSimulationRunning] = useState(false);
+
+
+    const completeTask = (task: keyof FittsTaskProgress) => {
+        if (!simulationRunning)
+            return;
+
         setProgressTasks(prev => ({
             ...prev,
             [task]: true,
         }))
     };
+
+    const resetTaskList = () => {
+        setProgressTasks({
+            addButton: false,
+            inputName: false,
+            inputDescription: false,
+            inputDate: false,
+            createButton: false,
+        })
+    }
 
     const registerClick = () => setClicks(c => c + 1);
 
@@ -59,8 +80,24 @@ export function Users() {
                 setLoadingFinish(false);
                 setShowFinalScreen(true);        // muestra pantalla final
             }, 1000); // 1 segundo
+            setSimulationRunning(false);
+
         }
-    }, [progressTasks])
+    }, [progressTasks]);
+
+    useEffect(() => {
+
+        function iniciarSimulacionFitts() {
+            // aquí vas a mover el cursor
+            // completar tareas automáticamente
+        }
+
+
+        if (simulationRunning) {
+            iniciarSimulacionFitts();
+        }
+    }, [simulationRunning]);
+
 
 
     const handleCompletedTodo = (id: number) => {
@@ -74,6 +111,7 @@ export function Users() {
     };
 
     const handleCreateTask = (todo: Todo) => {
+        completeTask("addButton");
         setSelectedTodo(todo);
         setModalAction("create");
         setOpenModal(true);
@@ -104,9 +142,7 @@ export function Users() {
         console.log(todo)
         setTodos(prev => [...prev, todo]);
         setOpenModal(false);
-        completeTask("create");
         setSelectedTodo(null);
-
     };
 
     const onConfirmEdit = (updatedTodo: Todo) => {
@@ -116,27 +152,39 @@ export function Users() {
             )
         );
         setOpenModal(false);
-        completeTask("edit");
         setSelectedTodo(null);
-
     };
 
 
     const onConfirmDelete = () => {
         setTodos(prev => prev.filter(t => t.id !== selectedTodo?.id));
         setOpenModal(false);
-        completeTask("delete");
         setSelectedTodo(null);
     };
 
     return (
         <div className="flex flex-col justify-center gap-6">
-            <h1 className="text-amber-50 mt-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">Pruebas con usuarios</h1>
+            <h1 className="text-amber-50 mt-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">Modelo predictivo de Fitts</h1>
             {/* interfaz normal mientras no termine */}
             <div className="flex flex-col justify-center gap-3 rounded-2xl border-2 shadow-xl shadow-gray-800 border-gray-700 box-border p-7">
-                <h2 className="text-xl text-amber-50 font-semibold">Completa las siguientes tareas:</h2>
-                <TaskList tasks={progressTasks} />
+                <h2 className="text-xl text-amber-50 font-semibold">(Simulación) Completa las siguientes tareas:</h2>
+                <PredictiveTaskList tasks={progressTasks} />
                 <ProgressBar progressPercent={progressPercent} />
+                <Button
+                    color="alternative"
+                    disabled={simulationRunning}
+                    onClick={() => {
+                        resetTaskList();
+                        setSimulationRunning(true);
+                        setShowFinalScreen(false);
+                        setStartTime(Date.now());
+                        setClicks(0);
+                        setErrors(0);
+                        setFinishTime(null);
+                    }}
+                >
+                    Iniciar simulación
+                </Button>
 
             </div>
             <hr class="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" />
@@ -167,7 +215,12 @@ export function Users() {
 
                     <div className="flex flex-col gap-6">
                         <ButtonGroup>
-                            <Button className="shadow-lg shadow-gray-950" color="alternative" onClick={(todo) => { registerClick(); handleCreateTask(todo); }}>
+                            <Button
+                                // disabled={simulationRunning}
+                                className="shadow-lg shadow-gray-950"
+                                color="alternative"
+                                onClick={(todo) => { registerClick(); handleCreateTask(todo); }}
+                            >
                                 <HiPlusCircle className="me-2 h-5 w-5" />
                                 Agregar TODO
                             </Button>
@@ -178,6 +231,7 @@ export function Users() {
                             handleCompletedTask={(id) => { registerClick(); handleCompletedTodo(id); }}
                             handleEditTask={(todo) => { registerClick(); handleEditTask(todo); }}
                             handleDeleteTask={(todo) => { registerClick(); handleDeleteTask(todo); }}
+                            disabled={simulationRunning}
                         />
 
                         <TodoModal
@@ -188,6 +242,7 @@ export function Users() {
                             onConfirmCreate={(todo) => { registerClick(); onConfirmCreate(todo); }}
                             onConfirmEdit={(todo) => { registerClick(); onConfirmEdit(todo); }}
                             onConfirmDelete={() => { registerClick(); onConfirmDelete(); }}
+                            completeTask={completeTask}
                         />
                     </div>
                 </>

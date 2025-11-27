@@ -11,9 +11,10 @@ type Props = {
     onConfirmCreate(newTodo: Todo | null): void;
     onConfirmDelete(): void;
     onConfirmEdit(newTodo: Todo | null): void;
+    completeTask?(task: string): void;
 }
 
-export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmCreate, onConfirmEdit, onConfirmDelete }: Props) {
+export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmCreate, onConfirmEdit, onConfirmDelete, completeTask }: Props) {
     const nameInputRef = useRef<HTMLInputElement>(null);
 
     const [editModalData, setEditModalData] = useState({
@@ -38,6 +39,7 @@ export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmCrea
         const handleConfirmSave = () => {
             const newTodo = { ...todo, ...editModalData };
             onConfirmCreate(newTodo);
+            completeTask?.("createButton");
         };
 
         return (
@@ -54,24 +56,30 @@ export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmCrea
                                         <div className="mb-2 block">
                                             <Label htmlFor="name">Nombre</Label>
                                         </div>
-                                        <TextInput id="name" ref={nameInputRef} placeholder="Nombre" required onChange={(e) =>
-                                            setEditModalData(prev => ({ ...prev, name: e.target.value }))
+                                        <TextInput id="name" ref={nameInputRef} placeholder="Nombre" required onChange={(e) => {
+                                            setEditModalData(prev => ({ ...prev, name: e.target.value }));
+                                            completeTask?.("inputName");
+                                        }
                                         } />
                                     </div>
                                     <div>
                                         <div className="mb-2 block">
                                             <Label htmlFor="description">Descripción</Label>
                                         </div>
-                                        <TextInput id="description" placeholder="Descripción" required onChange={(e) =>
-                                            setEditModalData(prev => ({ ...prev, description: e.target.value }))
+                                        <TextInput id="description" placeholder="Descripción" required onChange={(e) => {
+                                            setEditModalData(prev => ({ ...prev, description: e.target.value }));
+                                            completeTask?.("inputDescription");
+                                        }
                                         } />
                                     </div>
                                     <div>
                                         <div className="mb-2 block">
                                             <Label htmlFor="fecha">Fecha</Label>
                                         </div>
-                                        <TextInput id="fecha" placeholder="Fecha" required onChange={(e) =>
-                                            setEditModalData(prev => ({ ...prev, date: e.target.value }))
+                                        <TextInput id="fecha" placeholder="Fecha" required onChange={(e) => {
+                                            setEditModalData(prev => ({ ...prev, date: e.target.value }));
+                                            completeTask?.("inputDate");
+                                        }
                                         } />
                                     </div>
 
