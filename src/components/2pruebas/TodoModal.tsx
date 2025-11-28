@@ -54,9 +54,9 @@ export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmCrea
                                     <h3 className="text-xl font-medium text-gray-900 dark:text-white">Crear TODO</h3>
                                     <div>
                                         <div className="mb-2 block">
-                                            <Label htmlFor="name">Nombre</Label>
+                                            <Label htmlFor="ninput-todo-name">Nombre</Label>
                                         </div>
-                                        <TextInput id="name" ref={nameInputRef} placeholder="Nombre" required onChange={(e) => {
+                                        <TextInput data-fitts="name" id="input-todo-name" ref={nameInputRef} placeholder="Nombre" required onChange={(e) => {
                                             setEditModalData(prev => ({ ...prev, name: e.target.value }));
                                             completeTask?.("inputName");
                                         }
@@ -64,9 +64,9 @@ export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmCrea
                                     </div>
                                     <div>
                                         <div className="mb-2 block">
-                                            <Label htmlFor="description">Descripción</Label>
+                                            <Label htmlFor="input-todo-desc">Descripción</Label>
                                         </div>
-                                        <TextInput id="description" placeholder="Descripción" required onChange={(e) => {
+                                        <TextInput data-fitts="desc" id="input-todo-desc" placeholder="Descripción" required onChange={(e) => {
                                             setEditModalData(prev => ({ ...prev, description: e.target.value }));
                                             completeTask?.("inputDescription");
                                         }
@@ -74,9 +74,9 @@ export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmCrea
                                     </div>
                                     <div>
                                         <div className="mb-2 block">
-                                            <Label htmlFor="fecha">Fecha</Label>
+                                            <Label htmlFor="input-todo-date">Fecha</Label>
                                         </div>
-                                        <TextInput id="fecha" placeholder="Fecha" required onChange={(e) => {
+                                        <TextInput data-fitts="date" id="input-todo-date" placeholder="Fecha" required onChange={(e) => {
                                             setEditModalData(prev => ({ ...prev, date: e.target.value }));
                                             completeTask?.("inputDate");
                                         }
@@ -84,7 +84,7 @@ export function TodoModal({ todo, action, openModal, setOpenModal, onConfirmCrea
                                     </div>
 
                                     <div className="flex justify-center w-full gap-3">
-                                        <Button onClick={handleConfirmSave}>Guardar</Button>
+                                        <Button data-fitts="create" id="btn-create-todo" onClick={handleConfirmSave}>Guardar</Button>
                                         <Button color="alternative" onClick={() => setOpenModal(false)}>Cancelar</Button>
                                     </div>
                                 </>

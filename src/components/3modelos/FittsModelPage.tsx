@@ -9,10 +9,9 @@ import { TodoList } from "../2pruebas/TodoList";
 import { TodoModal } from "../2pruebas/TodoModal";
 import { Button, ButtonGroup, Spinner } from "flowbite-react";
 import { HiPlusCircle } from "react-icons/hi";
-import type { TaskProgress } from "../../types/TaskProgress";
 import type { FittsTaskProgress } from "../../types/FittsTaskProgress";
-import { TaskList } from "../2pruebas/TaskList";
-
+import type { FittsStep } from "../../types/FittsStep";
+import { computeFitts, getElementCenter, getTargetMetrics } from "../../util/Fitts";
 export function FittsModelPage() {
 
     const [todos, setTodos] = useState<Todo[]>(TodoData.todos);
@@ -41,7 +40,234 @@ export function FittsModelPage() {
 
     // simulación
     const [simulationRunning, setSimulationRunning] = useState(false);
+    const [simulationResult, setSimulationResult] = useState({
+        totalTimeMs: 0,
+        totalClicks: 0,
+        steps: [] as FittsStep[],
+    });
 
+    const fittsSteps: FittsStep[] = [
+        {
+            id: "addButton",
+            selector: '[data-fitts="add"]',
+            label: "Abrir formulario"
+        },
+        {
+            id: "inputName",
+            selector: '[data-fitts="name"]',
+            label: "Escribir nombre del TODO"
+        },
+        {
+            id: "inputDescription",
+            selector: '[data-fitts="desc"]',
+            label: "Escribir descripción"
+        },
+        {
+            id: "inputDate",
+            selector: '[data-fitts="date"]',
+            label: "Seleccionar fecha"
+        },
+        {
+            id: "createButton",
+            selector: '[data-fitts="create"]',
+            label: "Crear TODO"
+        }
+    ];
+
+    const [progress, setProgress] = useState<FittsTaskProgress>({
+        addButton: false,
+        inputName: false,
+        inputDescription: false,
+        inputDate: false,
+        createButton: false,
+    });
+
+    async function runFittsSimulation() {
+        let totalClicks = 0;
+        let totalTime = 0;
+
+        const cursor = document.getElementById("cursor-sim");
+        if (!cursor) {
+            console.warn("Cursor no encontrado (id=cursor-sim)");
+            return;
+        }
+
+        // Helper: espera ms
+        const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+        // Helper: simula tipeo en un input (espera entre caracteres)
+        async function simulateTyping(inputEl: HTMLInputElement, text: string, delay = 90) {
+            inputEl.focus();
+            inputEl.value = ""; // start clean
+            for (let i = 0; i < text.length; i++) {
+                inputEl.value += text[i];
+                // dispatch input/change for React controlled inputs
+                inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+                inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+                await wait(delay);
+            }
+            inputEl.blur();
+        }
+
+        for (const step of fittsSteps) {
+            const el = document.querySelector(step.selector) as HTMLElement | null;
+            if (!el) {
+                console.warn("Elemento no encontrado:", step.selector);
+                continue;
+            }
+
+            // centro del target
+            const { x, y, width } = getElementCenter(el);
+
+            // centro actual del cursor simulado
+            const cursorRect = cursor.getBoundingClientRect();
+            const currentX = cursorRect.left + cursorRect.width / 2;
+            const currentY = cursorRect.top + cursorRect.height / 2;
+
+            const distance = Math.hypot(x - currentX, y - currentY);
+
+            // fitts law
+            const metrics = computeFitts(distance, width);
+
+            step.result = {
+                ...metrics,
+                targetCenter: { x, y },
+            };
+
+            totalTime += metrics.timeMs;
+
+            // animar hacia el target
+            await animateCursorTo(cursor, { x, y }, metrics.timeMs);
+
+            // ---- aquí ejecutamos la acción real ----
+            // 1) hacemos click en el elemento (esto activará handlers → abrir modal, etc.)
+            try {
+                // preferimos llamar al handler nativo si existe
+                (el as HTMLElement).click();
+            } catch (err) {
+                // fallback dispatch
+                el.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+            }
+            totalClicks++;
+            setClicks(c => c + 1);
+
+            // 2) Pequeña espera para que DOM se actualice (e.g. modal aparezca)
+            await wait(200);
+
+            // 3) Si el paso es un input, rellenarlo automáticamente:
+            if (step.id === "inputName") {
+                const input = document.querySelector('[data-fitts="name"]') as HTMLInputElement | null;
+                if (input) {
+                    await simulateTyping(input, "Mi TODO automático");
+                } else {
+                    console.warn("Input name no encontrado después de abrir modal");
+                }
+            }
+
+            if (step.id === "inputDescription") {
+                const input = document.querySelector('[data-fitts="desc"]') as HTMLInputElement | null;
+                if (input) {
+                    await simulateTyping(input, "Descripción generada por simulación");
+                } else {
+                    console.warn("Input desc no encontrado");
+                }
+            }
+
+            if (step.id === "inputDate") {
+                // Si tu fecha es un input tipo date o un picker, intenta setear value y despachar eventos
+                const input = document.querySelector('[data-fitts="date"]') as HTMLInputElement | null;
+                if (input) {
+                    // ejemplo: YYYY-MM-DD
+                    const value = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+                    input.focus();
+                    //input.value = value;
+                    await simulateTyping(input, value.toString());
+                    input.dispatchEvent(new Event("input", { bubbles: true }));
+                    input.dispatchEvent(new Event("change", { bubbles: true }));
+                    await wait(1000);
+                    input.blur();
+                } else {
+                    console.warn("Input date no encontrado");
+                }
+            }
+
+            // Si paso es "createButton", click al botón guardar dentro del modal
+            if (step.id === "createButton") {
+                // puede que el botón tenga el mismo selector que definiste ('[data-fitts="create"]')
+                const createEl = document.querySelector(step.selector) as HTMLElement | null;
+                if (createEl) {
+                    // mover cursor visualmente al botón del modal (recalc centro por si cambió)
+                    const { x: cx, y: cy } = getElementCenter(createEl);
+                    await animateCursorTo(cursor, { x: cx, y: cy }, 200);
+                    try {
+                        createEl.click();
+                    } catch {
+                        createEl.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                    }
+                    totalClicks++;
+                    setClicks(c => c + 1);
+                    // marca paso completado
+                    const newTodo: Todo = {
+                        id: 1000,
+                        name: "Mi TODO automático",
+                        description: "Descripción generada por simulación",
+                        date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+                        state: "pendiente"
+                    }
+                    onConfirmCreate(newTodo);
+                    await wait(200);
+                } else {
+                    console.warn("Botón crear no encontrado al final");
+                }
+            }
+
+            // espera breve antes de seguir al siguiente paso
+            await wait(120);
+
+
+            completeTask(step.id);
+        }
+
+        setSimulationResult({
+            totalTimeMs: totalTime,
+            totalClicks,
+            steps: fittsSteps,
+        });
+    }
+
+
+    function animateCursorTo(cursor: HTMLElement, target: { x: number, y: number }, duration: number) {
+        return new Promise<void>((resolve) => {
+            const start = performance.now();
+            const rect = cursor.getBoundingClientRect();
+
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+
+            function step(now: number) {
+                const t = Math.min((now - start) / duration, 1);
+
+                const newX = startX + (target.x - startX) * t;
+                const newY = startY + (target.y - startY) * t;
+
+                cursor.style.left = `${newX}px`;
+                cursor.style.top = `${newY}px`;
+
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    resolve();
+                }
+            }
+
+            requestAnimationFrame(step);
+        });
+    }
+
+
+
+
+    //-------------->
 
     const completeTask = (task: keyof FittsTaskProgress) => {
         if (!simulationRunning)
@@ -87,14 +313,8 @@ export function FittsModelPage() {
 
     useEffect(() => {
 
-        function iniciarSimulacionFitts() {
-            // aquí vas a mover el cursor
-            // completar tareas automáticamente
-        }
-
-
         if (simulationRunning) {
-            iniciarSimulacionFitts();
+            runFittsSimulation();
         }
     }, [simulationRunning]);
 
@@ -217,6 +437,8 @@ export function FittsModelPage() {
                         <ButtonGroup>
                             <Button
                                 // disabled={simulationRunning}
+                                data-fitts="add"
+                                id="btn-add-todo"
                                 className="shadow-lg shadow-gray-950"
                                 color="alternative"
                                 onClick={(todo) => { registerClick(); handleCreateTask(todo); }}
@@ -247,6 +469,24 @@ export function FittsModelPage() {
                     </div>
                 </>
             )}
+            {simulationRunning && (
+                <div
+
+                    id="cursor-sim"
+                    style={{
+                        position: "fixed",
+                        width: "14px",
+                        height: "14px",
+                        borderRadius: "50%",
+                        background: "red",
+                        pointerEvents: "none",
+                        top: "100px",
+                        left: "100px",
+                        zIndex: 9999,
+                    }}
+                ></div>
+            )}
+
         </div>
     );
 
