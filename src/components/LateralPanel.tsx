@@ -36,7 +36,7 @@ export function LateralPanel() {
                                 </Link>
                             </SidebarItem>
                             <SidebarItem icon={HiLightBulb}>
-                                <Link to="/roads" className="w-full block">
+                                <Link to="/roads/cognitivo" className="w-full block">
                                     4. Recorridos cognitivos
                                 </Link>
                             </SidebarItem>
