@@ -1,29 +1,6 @@
 import React from 'react';
-import { readLS, writeLS } from './data/cognitiveStore.ts';
-type Step = {
-    detail: string;
-};
+import { readLS, writeLS, type Feedback, type Session } from './data/cognitiveStore.ts';
 
-type ErrorItem = {
-    detail: string;
-};
-
-type Session = {
-    id: string;
-    taskId: string;
-    taskTitle: string;
-    startedAt: string;
-    finishedAt: string;
-    durationSec: number;
-    steps: Step[];
-    errors: ErrorItem[];
-};
-
-type Feedback = {
-    sessionId: string;
-    difficulty: string;
-    comments: string;
-};
 
 export default function Summary() {
     const sessions = readLS<Session[]>('cw_sessions', []);
