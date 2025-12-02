@@ -44,7 +44,7 @@ export function Home() {
             id: "roads",
             title: "4. Recorridos cognitivos",
             icon: HiLightBulb,
-            to: "/roads/cognitivo",
+            to: "/roads",
             desc:
                 "Módulo interactivo donde la persona debe completar tareas específicas en una interfaz simulada, mientras se registran pasos, errores y feedback.",
             focus:
@@ -65,6 +65,7 @@ export function Home() {
     return (
         <div className="p-8 min-h-screen bg-slate-950 text-slate-50">
             <div className="max-w-6xl mx-auto">
+                {/* Encabezado */}
                 <header className="mb-8 space-y-3">
                     <h1 className="text-3xl md:text-4xl font-bold">
                         Laboratorio de evaluación de interfaces
@@ -78,7 +79,8 @@ export function Home() {
                     </p>
                 </header>
 
-                <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {/* Tarjetas de módulos */}
+                <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
                     {cards.map((card) => {
                         const Icon = card.icon;
                         return (
@@ -116,6 +118,54 @@ export function Home() {
                             </article>
                         );
                     })}
+                </section>
+
+                {/* Flujo recomendado */}
+                <section className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 space-y-3">
+                    <h2 className="text-sm font-semibold text-slate-50">
+                        Sugerencia de flujo de uso
+                    </h2>
+                    <p className="text-xs text-slate-400 max-w-3xl">
+                        Puedes usar los módulos de forma independiente, pero si quieres
+                        simular un proceso más completo de evaluación de una interfaz, este
+                        es un posible orden:
+                    </p>
+
+                    <ol className="list-decimal list-inside text-xs text-slate-300 space-y-1">
+                        <li>
+                            <span className="font-semibold">Métodos heurísticos:</span>{" "}
+                            revisa la interfaz con las heurísticas de Nielsen y registra
+                            problemas evidentes de diseño, consistencia, feedback, etc.
+                        </li>
+                        <li>
+                            <span className="font-semibold">Pruebas en usuarios:</span>{" "}
+                            define tareas reales, observa cómo las ejecutan las personas,
+                            registra tiempos, errores y comentarios.
+                        </li>
+                        <li>
+                            <span className="font-semibold">Modelos predictivos:</span>{" "}
+                            utiliza modelos como Fitts para estimar tiempos de selección y
+                            comparar alternativas de diseño desde una perspectiva más
+                            cuantitativa.
+                        </li>
+                        <li>
+                            <span className="font-semibold">Recorridos cognitivos:</span>{" "}
+                            analiza paso a paso cómo un usuario intenta completar una tarea,
+                            qué decisiones debe tomar y en qué puntos la interfaz lo ayuda o
+                            lo confunde.
+                        </li>
+                        <li>
+                            <span className="font-semibold">Evaluación subjetiva:</span>{" "}
+                            complementa los datos objetivos con la percepción del usuario:
+                            qué tanto le gustó la interfaz, qué tan difícil le pareció y qué
+                            tan dispuesto estaría a usarla nuevamente.
+                        </li>
+                    </ol>
+
+                    <p className="text-[11px] text-slate-500 pt-1">
+                        Puedes repetir el ciclo después de proponer mejoras de diseño para
+                        comparar resultados antes y después de los cambios.
+                    </p>
                 </section>
             </div>
         </div>
