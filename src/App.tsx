@@ -4,8 +4,8 @@ import { Home } from "./components/homepage/Home";
 import { Users } from "./components/2pruebas/UsersPage"
 import { FittsModelPage } from "./components/3modelos/FittsModelPage";
 import { Subjective } from "./components/5subjetiva/Subjective";
-import HeuristicsModule from "./components/1heuristica/HeuristicModule";
-import Roads from "./components/4recorridos/Roads";
+import { HeuristicsEvaluatePage, HeuristicsIntroPage, HeuristicsLayout, HeuristicsSummaryPage } from "./components/1heuristica/HeuristicsModule";
+import CognitiveDashboard from "./components/4recorridos/cognitive/CognitiveDashboard";
 
 const router = createBrowserRouter([
   {
@@ -13,11 +13,19 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "heuristics", element: <HeuristicsModule /> },
+      {
+        path: "heuristics", element: <HeuristicsLayout />,
+        children: [
+          { index: true, element: <HeuristicsIntroPage /> },
+          { path: "evaluate", element: <HeuristicsEvaluatePage /> },
+          { path: "summary", element: <HeuristicsSummaryPage /> },
+        ],
+      },
       { path: "users", element: <Users /> },
       { path: "models", element: <FittsModelPage /> },
-      { path: "roads", element: <Roads /> },
-      { path: "subjective", element: <Subjective /> }
+      { path: "roads/cognitivo", element: <CognitiveDashboard /> },
+      { path: "subjective", element: <Subjective /> },
+
 
     ],
   },

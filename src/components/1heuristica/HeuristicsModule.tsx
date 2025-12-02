@@ -837,16 +837,3 @@ export function HeuristicsSummaryPage() {
         </div>
     );
 }
-
-// -------------------------
-// Router local del módulo (por si lo usas aislado)
-// -------------------------
-export default function HeuristicsModule() {
-    return (
-        <Routes>
-            <Route path="/" element={<HeuristicsIntroPage />} />
-            <Route path="/evaluate" element={<HeuristicsEvaluatePage />} />
-            <Route path="/summary" element={<HeuristicsSummaryPage />} />
-        </Routes>
-    );
-}
