@@ -1,5 +1,5 @@
 // src/components/4recorridos/cognitive/CognitiveDashboard.tsx
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 export default function CognitiveDashboard() {
     const navigate = useNavigate();
@@ -61,6 +61,7 @@ export default function CognitiveDashboard() {
                     Ver resumen de sesiones
                 </button>
             </div>
+            <Outlet />
         </div>
     );
 }
