@@ -70,7 +70,7 @@ export function Home() {
                     <h1 className="text-3xl md:text-4xl font-bold">
                         Laboratorio de evaluación de interfaces
                     </h1>
-                    <p className="text-sm text-slate-400 max-w-2xl">
+                    <p className="text-m text-slate-400 max-w-2xl">
                         Esta aplicación reúne varios métodos de evaluación de usabilidad.
                         Cada módulo está aislado para que puedas practicar, registrar datos
                         y analizar resultados desde perspectivas distintas: heurística,
@@ -93,7 +93,7 @@ export function Home() {
                                         <Icon className="h-5 w-5" />
                                     </div>
                                     <div>
-                                        <h2 className="text-sm font-semibold">{card.title}</h2>
+                                        <h2 className="text-m font-semibold">{card.title}</h2>
                                         <p className="text-xs text-slate-400 mt-1">
                                             {card.desc}
                                         </p>
