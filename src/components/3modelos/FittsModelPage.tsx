@@ -383,12 +383,17 @@ export function FittsModelPage() {
     };
 
     return (
-        <div className="flex flex-col justify-center gap-6">
-            <h1 className="text-amber-50 mt-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">Modelo predictivo de Fitts</h1>
+        <div className="flex flex-col justify-center gap-2 p-8 text-slate-50 min-h-screen bg-slate-950">
+            <h3 className="text-3xl md:text-4xl font-bold">Modelo predictivo de Fitts</h3>
+            <p className="text-sm text-slate-300 max-w-2xl">
+                En este módulo simulas una evaluación heurística sobre pantallas de
+                ejemplo. Interactúa con los mockups, detecta problemas de usabilidad,
+                asígnales una heurística y una severidad y luego revisa el resumen de
+                hallazgos.
+            </p>
             {/* interfaz normal mientras no termine */}
-            <div className="flex flex-col justify-center gap-3 rounded-2xl border-2 shadow-xl shadow-gray-800 border-gray-700 box-border p-7">
-                <h2 className="text-xl text-amber-50 font-semibold">(Simulación) Completa las siguientes tareas:</h2>
-                <PredictiveTaskList tasks={progressTasks} />
+            <div className="flex flex-col bg-slate-900/60 border border-slate-800 rounded-2xl shadow-lg p-5 mt-4 gap-2">
+                <h2 className="text-xl font-semibold text-slate-50">(Simulación) Completa las siguientes tareas:</h2>                <PredictiveTaskList tasks={progressTasks} />
                 <ProgressBar progressPercent={progressPercent} />
                 <Button
                     color="alternative"
@@ -407,7 +412,7 @@ export function FittsModelPage() {
                 </Button>
 
             </div>
-            <hr class="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" />
+            <hr class="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10 m-4" />
             {/* si ya terminó → mostrar métricas */}
             {showFinalScreen ? (
                 <div className="text-center text-amber-100 flex flex-col gap-4 mt-6">
@@ -433,7 +438,7 @@ export function FittsModelPage() {
             ) : (
                 <>
 
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col bg-slate-900/60 border border-slate-800 rounded-2xl shadow-lg p-5 gap-5">
                         <ButtonGroup>
                             <Button
                                 // disabled={simulationRunning}

@@ -14,7 +14,7 @@ export function PredictiveTaskList({ tasks }: Props) {
         state ? "text-green-400" : "text-red-400";
 
     return (
-        <List className="text-lg">
+        <List className="text-lg ml-3">
             <ListItem
                 icon={getIcon(tasks.addButton)}
                 className={getColorClass(tasks.addButton)}

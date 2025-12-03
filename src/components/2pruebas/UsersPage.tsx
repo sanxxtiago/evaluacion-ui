@@ -130,17 +130,22 @@ export function Users() {
     };
 
     return (
-        <div className="flex flex-col justify-center gap-6">
-            <h1 className="text-amber-50 mt-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">Pruebas con usuarios</h1>
+        <div className="flex flex-col justify-center gap-2 p-8 text-slate-50 min-h-screen bg-slate-950">
+            <h3 className="text-3xl md:text-4xl font-bold">Pruebas con usuarios</h3>
             {/* interfaz normal mientras no termine */}
-            <div className="flex flex-col justify-center gap-3 rounded-2xl border-2 shadow-xl shadow-gray-800 border-gray-700 box-border p-7">
-                <h2 className="text-xl text-amber-50 font-semibold">Completa las siguientes tareas:</h2>
+            <p className="text-sm text-slate-300 max-w-2xl">
+                En este módulo simulas una evaluación heurística sobre pantallas de
+                ejemplo. Interactúa con los mockups, detecta problemas de usabilidad,
+                asígnales una heurística y una severidad y luego revisa el resumen de
+                hallazgos.
+            </p>
+            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl shadow-lg p-5 mt-4">
+                <h2 className="text-xl font-semibold text-slate-50">Completa las siguientes tareas:</h2>
                 <TaskList tasks={progressTasks} />
                 <ProgressBar progressPercent={progressPercent} />
 
             </div>
-            <hr class="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" />
-            {/* si ya terminó → mostrar métricas */}
+            <hr class="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10 m-4" />
             {showFinalScreen ? (
                 <div className="text-center text-amber-100 flex flex-col gap-4 mt-6">
                     <h2 className="text-3xl font-semibold">¡100% completado!</h2>
@@ -165,7 +170,7 @@ export function Users() {
             ) : (
                 <>
 
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col bg-slate-900/60 border border-slate-800 rounded-2xl shadow-lg p-5 gap-5">
                         <ButtonGroup>
                             <Button className="shadow-lg shadow-gray-950" color="alternative" onClick={(todo) => { registerClick(); handleCreateTask(todo); }}>
                                 <HiPlusCircle className="me-2 h-5 w-5" />

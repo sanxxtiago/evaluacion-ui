@@ -11,10 +11,10 @@ export function TaskList({ tasks }: Props) {
     const getIcon = (state: boolean) => state ? HiCheckCircle : HiXCircle;
 
     const getColorClass = (state: boolean) =>
-        state ? "text-green-400" : "text-red-400";
+        state ? "text-green-400" : "text-red-400 ";
 
     return (
-        <List className="text-lg">
+        <List className="text-lg ml-3 mt-1">
             <ListItem
                 icon={getIcon(tasks.create)}
                 className={getColorClass(tasks.create)}
