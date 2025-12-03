@@ -1,54 +1,62 @@
-// Layout.tsx
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { LateralPanel } from "../components/LateralPanel";
 
 export function MainLayout() {
+    const { pathname } = useLocation();
+
+    // Mapea rutas → número de step
+    const stepMap: Record<string, number> = {
+        "/heuristics": 1,
+        "/users": 2,
+        "/models": 3,
+        "/roads/cognitivo": 4,
+        "/subjective": 5,
+    };
+
+    const currentStep = stepMap[pathname] ?? 0;
+
     return (
         <div className="bg-gray-900 flex flex-row h-screen">
             <LateralPanel />
+
             <div className="flex flex-col w-full content-stretch">
-                <div className="bg-gray-800 py-3 px-10">
-                    <ol class="flex items-center w-full space-x-4">
 
-                        <li class="flex w-full items-center text-fg-brand after:content-[''] after:w-full after:h-1 after:border-b after:border-brand-subtle after:border-4 after:inline-block after:ms-4 after:rounded-full">
-                            <span class="flex items-center justify-center w-10 h-10 bg-blue-200 text-blue-900 rounded-full lg:h-12 lg:w-12 shrink-0">
-                                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
-                                </svg>
-                            </span>
-                        </li>
+                {/* Stepper según sección */}
+                <div className="bg-gray-800 py-3 px-10 pr-12">
+                    <ol className="flex items-center w-full">
+                        {[1, 2, 3, 4, 5].map((step, i) => {
+                            const active = step <= currentStep;
+                            const isLast = i === 4;
 
-                        <li class="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-500 after:border-4 after:inline-block after:ms-4 after:rounded-full">
-                            <span class="flex items-center justify-center w-10 h-10 bg-gray-300 text-gray-900 rounded-full lg:h-12 lg:w-12 shrink-0">
-                                2
-                            </span>
-                        </li>
+                            return (
+                                <li key={step} className={`flex items-center ${!isLast ? 'flex-1' : ''}`}>
+                                    {/* Bolita del step */}
+                                    <div
+                                        className={
+                                            "flex items-center justify-center w-6 h-6 text-xs font-bold rounded-full shrink-0 " +
+                                            (active
+                                                ? "bg-blue-500 text-white"
+                                                : "bg-gray-700 text-gray-300")
+                                        }
+                                    >
+                                        {step}
+                                    </div>
 
-                        <li class="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-500 after:border-4 after:inline-block after:ms-4 after:rounded-full">
-                            <span class="flex items-center justify-center w-10 h-10 bg-gray-300 text-gray-900 rounded-full lg:h-12 lg:w-12 shrink-0">
-                                3
-                            </span>
-                        </li>
-
-                        <li class="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-500 after:border-4 after:inline-block after:ms-4 after:rounded-full">
-                            <span class="flex items-center justify-center w-10 h-10 bg-gray-300 text-gray-900 rounded-full lg:h-12 lg:w-12 shrink-0">
-                                4
-                            </span>
-                        </li>
-
-                        <li class="flex items-center">
-                            <span class="flex items-center justify-center w-10 h-10 bg-gray-300 text-gray-900 rounded-full lg:h-12 lg:w-12 shrink-0">
-                                5
-                            </span>
-                        </li>
-
+                                    {/* Línea conectora (excepto en el último) */}
+                                    {!isLast && (
+                                        <div
+                                            className={
+                                                "flex-1 h-0.5 mx-3 rounded-full " +
+                                                (active ? "bg-blue-400" : "bg-gray-600")
+                                            }
+                                        />
+                                    )}
+                                </li>
+                            );
+                        })}
                     </ol>
-
-
-
-
-
                 </div>
+
                 <div className="flex-1 overflow-auto p-4">
                     <Outlet />
                 </div>

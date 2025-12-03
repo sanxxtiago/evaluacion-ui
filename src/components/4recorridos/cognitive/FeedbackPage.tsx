@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FEEDBACK_KEY, readLS, writeLS, type Feedback } from "./cognitiveStore";
+import { Button } from "flowbite-react";
 
 export default function FeedbackPage() {
     const { sessionId } = useParams<{ sessionId: string }>();
@@ -29,25 +30,31 @@ export default function FeedbackPage() {
     }
 
     return (
-        <div className="p-8 text-slate-50 min-h-screen bg-slate-950">
-            <div className="max-w-xl mx-auto bg-slate-900/70 border border-slate-700 rounded-2xl p-6">
-                <h2 className="text-xl font-semibold mb-2">
-                    Feedback de la tarea realizada
-                </h2>
-                <p className="text-xs text-slate-400 mb-4">
-                    Evalúa qué tan difícil te resultó la tarea y deja comentarios
-                    cualitativos sobre la experiencia.
-                </p>
+        <div className="flex flex-col gap-6 p-8 min-h-screen bg-gray-900">
+            <div className="max-w-2xl mx-auto w-full bg-gray-800 border border-gray-700 rounded-xl shadow-xl p-8">
+                {/* Header */}
+                <div className="space-y-2 mb-6">
+                    <h2 className="text-2xl font-semibold text-white">
+                        Feedback de la tarea realizada
+                    </h2>
+                    <p className="text-sm text-gray-400 leading-relaxed">
+                        Evalúa qué tan difícil te resultó la tarea y deja comentarios
+                        cualitativos sobre la experiencia.
+                    </p>
+                </div>
 
-                <div className="space-y-4 text-sm">
+                <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mb-6" />
+
+                {/* Form */}
+                <div className="space-y-6">
                     <div>
-                        <label className="block text-xs text-slate-300 mb-1">
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
                             Dificultad percibida
                         </label>
                         <select
                             value={difficulty}
                             onChange={(e) => setDifficulty(e.target.value)}
-                            className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                         >
                             <option value="Muy fácil">Muy fácil</option>
                             <option value="Fácil">Fácil</option>
@@ -58,31 +65,36 @@ export default function FeedbackPage() {
                     </div>
 
                     <div>
-                        <label className="block text-xs text-slate-300 mb-1">
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
                             Comentarios
                         </label>
                         <textarea
                             value={comments}
                             onChange={(e) => setComments(e.target.value)}
-                            rows={5}
-                            className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                            rows={6}
+                            className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
                             placeholder="¿Qué fue confuso, claro, fácil o frustrante?"
                         />
                     </div>
 
-                    <div className="flex gap-2 pt-2">
-                        <button
+                    <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+                    {/* Buttons */}
+                    <div className="flex gap-3 pt-2">
+                        <Button
+                            color="success"
+                            className="shadow-lg hover:shadow-xl hover:bg-sky-900 transition-shadow text-white"
                             onClick={handleSave}
-                            className="px-3 py-2 text-xs bg-emerald-600 hover:bg-emerald-700 rounded-lg"
                         >
                             Guardar feedback
-                        </button>
-                        <button
+                        </Button>
+                        <Button
+                            color="gray"
+                            className="shadow-lg hover:shadow-xl transition-shadow"
                             onClick={() => navigate("/roads/cognitivo")}
-                            className="px-3 py-2 text-xs border border-slate-600 rounded-lg hover:bg-slate-800"
                         >
                             Cancelar
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Button } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
@@ -115,45 +116,54 @@ export function HeuristicsLayout() {
     const isSummary = location.pathname.startsWith(`${base}/summary`);
 
     return (
-        <div className="p-8 text-slate-50 min-h-screen bg-slate-950">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">Evaluación heurística</h1>
-            <p className="text-sm text-slate-400 mb-6 max-w-2xl">
-                Módulo aislado para practicar la identificación de problemas de
-                usabilidad basados en las heurísticas de Nielsen. Los datos se guardan
-                localmente en tu navegador.
-            </p>
+        <div className="flex flex-col gap-6 p-8 min-h-screen bg-gray-900">
+            {/* Header */}
+            <div className="space-y-2">
+                <h1 className="text-3xl md:text-4xl font-bold text-white">
+                    Evaluación heurística
+                </h1>
+                <p className="text-sm text-gray-400 max-w-3xl leading-relaxed">
+                    Módulo aislado para practicar la identificación de problemas de
+                    usabilidad basados en las heurísticas de Nielsen. Los datos se guardan
+                    localmente en tu navegador.
+                </p>
+            </div>
 
-            <div className="mb-6 flex flex-wrap gap-2">
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+            {/* Navegación de pestañas */}
+            <div className="flex flex-wrap gap-3">
                 <Link
                     to="/heuristics"
-                    className={`px-4 py-2 rounded-lg text-sm border transition ${isIntro
-                        ? "bg-slate-800 border-slate-600"
-                        : "bg-slate-900/60 border-slate-800 hover:border-slate-500"
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${isIntro
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 hover:text-white"
                         }`}
                 >
                     Introducción
                 </Link>
                 <Link
                     to="/heuristics/evaluate"
-                    className={`px-4 py-2 rounded-lg text-sm border transition ${isEval
-                        ? "bg-slate-800 border-slate-600"
-                        : "bg-slate-900/60 border-slate-800 hover:border-slate-500"
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${isEval
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 hover:text-white"
                         }`}
                 >
                     Evaluar interfaz
                 </Link>
                 <Link
                     to="/heuristics/summary"
-                    className={`px-4 py-2 rounded-lg text-sm border transition ${isSummary
-                        ? "bg-slate-800 border-slate-600"
-                        : "bg-slate-900/60 border-slate-800 hover:border-slate-500"
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${isSummary
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600 hover:text-white"
                         }`}
                 >
                     Resumen
                 </Link>
             </div>
 
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl shadow-lg">
+            {/* Contenido */}
+            <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl">
                 <Outlet />
             </div>
         </div>
@@ -175,85 +185,86 @@ function MockupScreen1({ onReport }: { onReport?: (hint: string) => void }) {
     const [compact, setCompact] = useState(false);
 
     return (
-        <div className="bg-slate-900 border border-slate-700 rounded-xl p-4 shadow-sm space-y-4">
-            <div className="flex flex-wrap justify-between gap-3 items-start">
-                <div>
-                    <h3 className="font-semibold mb-1 text-slate-50 text-sm">
+        <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 shadow-lg space-y-5">
+            <div className="flex flex-wrap justify-between gap-4 items-start">
+                <div className="space-y-1">
+                    <h3 className="font-semibold text-white text-base">
                         Mockup: Dashboard de pedidos
                     </h3>
-                    <p className="text-xs text-slate-400 max-w-md">
-
+                    <p className="text-sm text-gray-400">
+                        Interfaz de gestión con múltiples problemas de usabilidad
                     </p>
                 </div>
-                <div className="text-[11px] text-amber-40 bg-amber-500/10 border border-amber-500/40 px-3 py-1 rounded-lg">
-                    Última sincronización: hace 2 horas
+                <div className="text-xs bg-yellow-500/10 border border-yellow-500/30 px-3 py-2 rounded-lg text-yellow-300">
+                    ⚠️ Última sincronización: hace 2 horas
                 </div>
             </div>
 
             {/* Filtros */}
-            <div className="flex flex-wrap gap-3 items-center text-xs">
+            <div className="flex flex-wrap gap-4 items-center">
                 <div className="flex items-center gap-2">
-                    <span className="text-slate-300">Estado:</span>
+                    <span className="text-sm text-gray-300">Estado:</span>
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     >
                         <option value="all">Todos</option>
                         <option value="pending">En curso</option>
                         <option value="done">Listo</option>
-                        <option value="unknown">? </option>
+                        <option value="unknown">?</option>
                     </select>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <span className="text-slate-300">Buscar:</span>
+                    <span className="text-sm text-gray-300">Buscar:</span>
                     <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 min-w-[160px]"
-                        placeholder="Escribe algo... "
+                        className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all min-w-[200px]"
+                        placeholder="Escribe algo..."
                     />
                 </div>
 
-                <label className="flex items-center gap-2 ml-auto">
+                <label className="flex items-center gap-3 ml-auto bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 cursor-pointer hover:border-gray-600 transition-all group">
                     <input
                         type="checkbox"
                         checked={compact}
                         onChange={(e) => setCompact(e.target.checked)}
+                        className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                     />
-                    <span className="text-slate-300">
+                    <span className="text-sm text-gray-300 group-hover:text-white">
                         Modo comprimido
                     </span>
                 </label>
             </div>
 
             {/* Tabla de pedidos */}
-            <div className="border border-slate-700 rounded-lg overflow-hidden">
-                <table className="w-full text-xs text-slate-200">
-                    <thead className="bg-slate-950/80 border-b border-slate-700">
+            <div className="border border-gray-700 rounded-lg overflow-hidden">
+                <table className="w-full text-sm text-gray-200">
+                    <thead className="bg-gray-950 border-b border-gray-700">
                         <tr>
-                            <th className="px-3 py-2 text-left font-medium">ID</th>
-                            <th className="px-3 py-2 text-left font-medium">Cliente</th>
-                            <th className="px-3 py-2 text-left font-medium">Estado</th>
-                            <th className="px-3 py-2 text-left font-medium">Total</th>
-                            <th className="px-3 py-2 text-left font-medium">Acciones</th>
+                            <th className="px-4 py-3 text-left font-semibold text-white">ID</th>
+                            <th className="px-4 py-3 text-left font-semibold text-white">Cliente</th>
+                            <th className="px-4 py-3 text-left font-semibold text-white">Estado</th>
+                            <th className="px-4 py-3 text-left font-semibold text-white">Total</th>
+                            <th className="px-4 py-3 text-left font-semibold text-white">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody className={compact ? "divide-y divide-slate-800" : ""}>
-                        <tr className="hover:bg-slate-800/60">
-                            <td className="px-3 py-2">#1023</td>
-                            <td className="px-3 py-2">María López</td>
-                            <td className="px-3 py-2">
-                                <span className="px-2 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/40 text-[10px]">
+                    <tbody className="divide-y divide-gray-800">
+                        <tr className="hover:bg-gray-800/60 transition-colors">
+                            <td className="px-4 py-3">#1023</td>
+                            <td className="px-4 py-3">María López</td>
+                            <td className="px-4 py-3">
+                                <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-300 border border-yellow-500/40 text-xs font-medium">
                                     En curso
                                 </span>
                             </td>
-                            <td className="px-3 py-2">$ 230.000</td>
-                            <td className="px-3 py-2">
-                                <div className="flex gap-1">
+                            <td className="px-4 py-3">$ 230.000</td>
+                            <td className="px-4 py-3">
+                                <div className="flex gap-2">
                                     <button
-                                        className="px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[10px]"
+                                        className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs border border-gray-700 transition-all"
                                         onClick={() =>
                                             onReport?.(
                                                 "Botones de acciones solo muestran iconos/etiquetas vagas, poco claras para usuarios nuevos."
@@ -263,7 +274,7 @@ function MockupScreen1({ onReport }: { onReport?: (hint: string) => void }) {
                                         Ver
                                     </button>
                                     <button
-                                        className="px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[10px]"
+                                        className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs border border-gray-700 transition-all"
                                         onClick={() =>
                                             onReport?.(
                                                 "Acción 'Mover' no explica qué implica: ¿cambiar estado, reasignar, archivar?"
@@ -273,7 +284,7 @@ function MockupScreen1({ onReport }: { onReport?: (hint: string) => void }) {
                                         Mover
                                     </button>
                                     <button
-                                        className="px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[10px]"
+                                        className="px-3 py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 text-red-300 text-xs border border-red-600/40 transition-all"
                                         onClick={() =>
                                             onReport?.(
                                                 "No hay confirmación ni explicación previa antes de eliminar."
@@ -285,18 +296,18 @@ function MockupScreen1({ onReport }: { onReport?: (hint: string) => void }) {
                                 </div>
                             </td>
                         </tr>
-                        <tr className="hover:bg-slate-800/60">
-                            <td className="px-3 py-2">#1024</td>
-                            <td className="px-3 py-2">Compañía ABC</td>
-                            <td className="px-3 py-2">
-                                <span className="px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/40 text-[10px]">
+                        <tr className="hover:bg-gray-800/60 transition-colors">
+                            <td className="px-4 py-3">#1024</td>
+                            <td className="px-4 py-3">Compañía ABC</td>
+                            <td className="px-4 py-3">
+                                <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-300 border border-green-500/40 text-xs font-medium">
                                     Listo
                                 </span>
                             </td>
-                            <td className="px-3 py-2">$ 1.520.000</td>
-                            <td className="px-3 py-2">
+                            <td className="px-4 py-3">$ 1.520.000</td>
+                            <td className="px-4 py-3">
                                 <button
-                                    className="px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[10px]"
+                                    className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs border border-gray-700 transition-all"
                                     onClick={() =>
                                         onReport?.(
                                             "No se muestra claramente qué pasó con el pedido (no hay histórico ni detalle de cambios)."
@@ -307,18 +318,18 @@ function MockupScreen1({ onReport }: { onReport?: (hint: string) => void }) {
                                 </button>
                             </td>
                         </tr>
-                        <tr className="hover:bg-slate-800/60">
-                            <td className="px-3 py-2">#1025</td>
-                            <td className="px-3 py-2">—</td>
-                            <td className="px-3 py-2">
-                                <span className="px-2 py-1 rounded-full bg-red-500/10 text-red-300 border border-red-500/40 text-[10px]">
+                        <tr className="hover:bg-gray-800/60 transition-colors">
+                            <td className="px-4 py-3">#1025</td>
+                            <td className="px-4 py-3 text-gray-500">—</td>
+                            <td className="px-4 py-3">
+                                <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-300 border border-red-500/40 text-xs font-medium">
                                     ?
                                 </span>
                             </td>
-                            <td className="px-3 py-2">$ —</td>
-                            <td className="px-3 py-2">
+                            <td className="px-4 py-3 text-gray-500">$ —</td>
+                            <td className="px-4 py-3">
                                 <button
-                                    className="px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[10px]"
+                                    className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs border border-gray-700 transition-all"
                                     onClick={() =>
                                         onReport?.(
                                             "Fila con información incompleta y estado ambiguo; no se explica qué significa."
@@ -334,18 +345,23 @@ function MockupScreen1({ onReport }: { onReport?: (hint: string) => void }) {
             </div>
 
             {/* Mensaje de error poco destacado */}
-            <div className="text-[11px] text-red-300 bg-red-500/5 border border-red-500/40 rounded-lg px-3 py-2">
-                Pedidos pendientes de sincronización
-                <button
-                    className="ml-2 underline"
-                    onClick={() =>
-                        onReport?.(
-                            "Mensaje de error poco visible y sin acciones claras para recuperarse del problema."
-                        )
-                    }
-                >
-                    Reportar como problema
-                </button>
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start gap-3">
+                <span className="text-red-400 text-xl">❌</span>
+                <div className="flex-1">
+                    <p className="text-sm text-red-300">
+                        Pedidos pendientes de sincronización
+                    </p>
+                    <button
+                        className="mt-2 text-xs text-red-400 underline hover:text-red-300"
+                        onClick={() =>
+                            onReport?.(
+                                "Mensaje de error poco visible y sin acciones claras para recuperarse del problema."
+                            )
+                        }
+                    >
+                        Reportar como problema
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -365,30 +381,30 @@ function MockupScreen2({ onReport }: { onReport?: (hint: string) => void }) {
     const [terms, setTerms] = useState(false);
 
     return (
-        <div className="bg-slate-900 border border-slate-700 rounded-xl p-4 shadow-sm space-y-4">
-            <div className="flex justify-between items-start gap-4">
-                <div>
-                    <h3 className="font-semibold mb-1 text-slate-50 text-sm">
+        <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 shadow-lg space-y-5">
+            <div className="flex flex-wrap justify-between items-start gap-4">
+                <div className="space-y-1">
+                    <h3 className="font-semibold text-white text-base">
                         Mockup: Registro / Configuración de cuenta
                     </h3>
-                    <p className="text-xs text-slate-400 max-w-md">
-
+                    <p className="text-sm text-gray-400">
+                        Formulario con problemas de etiquetado y validación
                     </p>
                 </div>
-                <div className="flex gap-2 text-[11px]">
+                <div className="flex gap-2">
                     <button
-                        className={`px-2 py-1 rounded-md border ${step === 1
-                            ? "bg-blue-600 border-blue-500"
-                            : "border-slate-700 bg-slate-900"
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${step === 1
+                            ? "bg-blue-600 text-white shadow-lg"
+                            : "bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600"
                             }`}
                         onClick={() => setStep(1)}
                     >
                         Paso 1
                     </button>
                     <button
-                        className={`px-2 py-1 rounded-md border ${step === 2
-                            ? "bg-blue-600 border-blue-500"
-                            : "border-slate-700 bg-slate-900"
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${step === 2
+                            ? "bg-blue-600 text-white shadow-lg"
+                            : "bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600"
                             }`}
                         onClick={() => setStep(2)}
                     >
@@ -398,97 +414,102 @@ function MockupScreen2({ onReport }: { onReport?: (hint: string) => void }) {
             </div>
 
             {step === 1 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-2">
                         <label className="block">
-                            <span className="text-slate-300 text-[11px]">
+                            <span className="text-sm font-medium text-gray-300">
                                 Identificador principal
                             </span>
                             <input
                                 value={idField}
                                 onChange={(e) => setIdField(e.target.value)}
-                                className="mt-1 w-full px-2 py-1 rounded-lg bg-slate-950 border border-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                className="mt-2 w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                 placeholder="Ej: 000123"
                             />
                         </label>
-                        <p className="text-[11px] text-slate-500">
+                        <p className="text-xs text-gray-500">
+                            Campo ambiguo sin explicación clara
                         </p>
                     </div>
                     <div className="space-y-2">
                         <label className="block">
-                            <span className="text-slate-300 text-[11px]">Nombre visible</span>
+                            <span className="text-sm font-medium text-gray-300">Nombre visible</span>
                             <input
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="mt-1 w-full px-2 py-1 rounded-lg bg-slate-950 border border-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                placeholder="Nombre que verán otras personas "
+                                className="mt-2 w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="Nombre que verán otras personas"
                             />
                         </label>
                     </div>
                     <div className="space-y-2">
                         <label className="block">
-                            <span className="text-slate-300 text-[11px]">
-                                Alias público (opcional)
+                            <span className="text-sm font-medium text-gray-300">
+                                Alias público <span className="text-gray-500">(opcional)</span>
                             </span>
                             <input
                                 value={alias}
                                 onChange={(e) => setAlias(e.target.value)}
-                                className="mt-1 w-full px-2 py-1 rounded-lg bg-slate-950 border border-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                className="mt-2 w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                 placeholder="@usuario123"
                             />
                         </label>
                     </div>
-                    <div className="space-y-2">
-                        <div className="text-[11px] text-slate-400">
-
-                            <button
-                                className="ml-1 underline"
-                                onClick={() =>
-                                    onReport?.(
-                                        "No hay distinción clara entre campos obligatorios y opcionales."
-                                    )
-                                }
-                            >
-                                Reportar
-                            </button>
+                    <div className="space-y-2 flex items-end">
+                        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 w-full">
+                            <p className="text-xs text-yellow-300">
+                                ⚠️ Sin distinción clara entre obligatorios y opcionales
+                                <button
+                                    className="ml-2 underline hover:text-yellow-200"
+                                    onClick={() =>
+                                        onReport?.(
+                                            "No hay distinción clara entre campos obligatorios y opcionales."
+                                        )
+                                    }
+                                >
+                                    Reportar
+                                </button>
+                            </p>
                         </div>
                     </div>
                 </div>
             )}
 
             {step === 2 && (
-                <div className="grid grid-cols-1 md:grid-cols-[2fr,1.2fr] gap-4 text-xs">
-                    <div className="space-y-3">
-                        <label className="flex items-center gap-2 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">
+                <div className="grid grid-cols-1 lg:grid-cols-[2fr,1fr] gap-6">
+                    <div className="space-y-4">
+                        <label className="flex items-start gap-3 bg-gray-800 border border-gray-700 rounded-lg p-4 cursor-pointer hover:border-gray-600 transition-all group">
                             <input
                                 type="checkbox"
                                 checked={newsletter}
                                 onChange={(e) => setNewsletter(e.target.checked)}
+                                className="w-4 h-4 mt-0.5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                             />
-                            <div>
-                                <div className="text-slate-200">
+                            <div className="flex-1">
+                                <div className="text-sm text-white font-medium">
                                     Quiero recibir cosas importantes
                                 </div>
-                                <div className="text-[11px] text-slate-500">
-
+                                <div className="text-xs text-gray-400 mt-1">
+                                    Descripción vaga y poco clara
                                 </div>
                             </div>
                         </label>
 
-                        <label className="flex items-center gap-2 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2">
+                        <label className="flex items-start gap-3 bg-gray-800 border border-gray-700 rounded-lg p-4 cursor-pointer hover:border-gray-600 transition-all group">
                             <input
                                 type="checkbox"
                                 checked={terms}
                                 onChange={(e) => setTerms(e.target.checked)}
+                                className="w-4 h-4 mt-0.5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                             />
-                            <div>
-                                <div className="text-slate-200">
+                            <div className="flex-1">
+                                <div className="text-sm text-white font-medium">
                                     Acepto todo lo anterior y lo que venga
                                 </div>
-                                <div className="text-[11px] text-slate-500">
-
+                                <div className="text-xs text-gray-400 mt-1">
+                                    Consentimiento ambiguo sin enlaces
                                     <button
-                                        className="ml-1 underline"
+                                        className="ml-2 underline hover:text-gray-300"
                                         onClick={() =>
                                             onReport?.(
                                                 "El consentimiento es ambiguo y no remite claramente a la documentación de términos."
@@ -502,25 +523,40 @@ function MockupScreen2({ onReport }: { onReport?: (hint: string) => void }) {
                         </label>
                     </div>
 
-                    <div className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 space-y-2">
-                        <div className="text-[11px] text-slate-400 uppercase tracking-wide">
+                    <div className="bg-gray-800 border border-gray-700 rounded-lg p-5 space-y-4">
+                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                             Resumen lateral
                         </div>
-                        <div className="text-[11px] text-slate-300">
+                        <div className="text-sm text-gray-300">
                             Este resumen intenta mostrar la configuración.
                         </div>
-                        <ul className="text-[11px] text-slate-200 list-disc list-inside space-y-1">
-                            <li>Identificador: {idField || "no definido"}</li>
-                            <li>Nombre visible: {name || "no definido"}</li>
-                            <li>Alias: {alias || "no definido"}</li>
-                            <li>
-                                Suscripción:{" "}
-                                {newsletter ? "Activada (no se detalla)" : "Desactivada"}
+                        <ul className="text-sm text-gray-200 space-y-2">
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-400 mt-0.5">•</span>
+                                <span>Identificador: {idField || "no definido"}</span>
                             </li>
-                            <li>Consentimiento general: {terms ? "Marcado" : "Sin marcar"}</li>
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-400 mt-0.5">•</span>
+                                <span>Nombre visible: {name || "no definido"}</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-400 mt-0.5">•</span>
+                                <span>Alias: {alias || "no definido"}</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-400 mt-0.5">•</span>
+                                <span>
+                                    Suscripción:{" "}
+                                    {newsletter ? "Activada (no se detalla)" : "Desactivada"}
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-400 mt-0.5">•</span>
+                                <span>Consentimiento: {terms ? "Marcado" : "Sin marcar"}</span>
+                            </li>
                         </ul>
                         <button
-                            className="mt-1 text-[11px] underline"
+                            className="text-xs text-blue-400 underline hover:text-blue-300"
                             onClick={() =>
                                 onReport?.(
                                     "Resumen poco estructurado, difícil de verificar antes de confirmar."
@@ -533,9 +569,11 @@ function MockupScreen2({ onReport }: { onReport?: (hint: string) => void }) {
                 </div>
             )}
 
-            <div className="text-[11px] text-slate-400">
-                Intenta identificar problemas de etiquetado, consistencia, carga de
-                memoria, agrupación de campos y manejo de errores/validaciones.
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                <p className="text-sm text-blue-300">
+                    💡 Intenta identificar problemas de etiquetado, consistencia, carga de
+                    memoria, agrupación de campos y manejo de errores/validaciones.
+                </p>
             </div>
         </div>
     );
@@ -546,12 +584,12 @@ function MockupScreen2({ onReport }: { onReport?: (hint: string) => void }) {
 // -------------------------
 export function HeuristicsIntroPage() {
     return (
-        <div className="p-6 space-y-6">
-            <div>
-                <h2 className="text-xl font-semibold text-slate-50 mb-2">
+        <div className="p-8 space-y-6">
+            <div className="space-y-2">
+                <h2 className="text-2xl font-semibold text-white">
                     Introducción al ejercicio
                 </h2>
-                <p className="text-sm text-slate-300 max-w-2xl">
+                <p className="text-sm text-gray-400 max-w-3xl leading-relaxed">
                     En este módulo simulas una evaluación heurística sobre pantallas de
                     ejemplo. Interactúa con los mockups, detecta problemas de usabilidad,
                     asígnales una heurística y una severidad y luego revisa el resumen de
@@ -559,26 +597,30 @@ export function HeuristicsIntroPage() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="h-px bg-linear-to-r from-transparent via-gray-700 to-transparent" />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {HEURISTICS.map((h) => (
                     <div
                         key={h.key}
-                        className="bg-slate-900 border border-slate-800 rounded-xl p-4"
+                        className="bg-gray-900 border border-gray-700 rounded-xl p-5 hover:border-gray-600 transition-all"
                     >
-                        <div className="font-semibold text-slate-50 text-sm mb-1">
+                        <div className="font-semibold text-white text-base mb-2">
                             {h.label}
                         </div>
-                        <div className="text-xs text-slate-400">{h.desc}</div>
+                        <div className="text-sm text-gray-400 leading-relaxed">{h.desc}</div>
                     </div>
                 ))}
             </div>
 
-            <div className="pt-4">
+            <div className="h-px bg-linear-to-r from-transparent via-gray-700 to-transparent" />
+
+            <div className="flex justify-center pt-4">
                 <Link
                     to="/heuristics/evaluate"
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-sm rounded-lg"
+                    className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-sm font-medium rounded-lg text-white shadow-lg hover:shadow-xl transition-all"
                 >
-                    Empezar a evaluar
+                    Empezar a evaluar →
                 </Link>
             </div>
         </div>
@@ -627,16 +669,17 @@ export function HeuristicsEvaluatePage() {
     }
 
     return (
-        <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-4">
-                <div className="flex flex-wrap items-center gap-2">
-                    <label className="text-xs text-slate-300">Seleccionar mockup:</label>
+        <div className="p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Área principal - Mockups */}
+            <div className="lg:col-span-2 space-y-5">
+                <div className="flex flex-wrap items-center gap-3">
+                    <label className="text-sm font-medium text-gray-300">Seleccionar mockup:</label>
                     <select
                         value={screenId}
                         onChange={(e) =>
                             setScreenId(e.target.value as "screen1" | "screen2")
                         }
-                        className="p-2 text-sm bg-slate-950 border border-slate-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     >
                         <option value="screen1">Dashboard de pedidos</option>
                         <option value="screen2">Registro / Configuración</option>
@@ -652,30 +695,34 @@ export function HeuristicsEvaluatePage() {
                     )}
                 </div>
 
-                <div className="mt-2 bg-slate-900 border border-slate-800 rounded-xl p-3">
-                    <div className="text-xs text-slate-400">
-                        Sugerencia:{" "}
-                        <span className="text-slate-200">
-                            {hint ??
-                                "Interactúa con la pantalla y usa el panel de la derecha para registrar los problemas detectados (uno por registro)."}
-                        </span>
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                        <span className="text-blue-400 text-xl">💡</span>
+                        <div className="flex-1">
+                            <p className="text-sm font-medium text-blue-300 mb-1">Sugerencia</p>
+                            <p className="text-sm text-blue-200">
+                                {hint ??
+                                    "Interactúa con la pantalla y usa el panel de la derecha para registrar los problemas detectados (uno por registro)."}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <aside className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
-                <h3 className="font-semibold text-slate-50 text-sm">
+            {/* Panel lateral - Formulario de registro */}
+            <aside className="bg-gray-900 border border-gray-700 rounded-xl p-6 space-y-5 h-fit sticky top-8">
+                <h3 className="font-semibold text-white text-lg">
                     Registrar problema
                 </h3>
 
-                <div>
-                    <label className="block text-xs text-slate-300">
+                <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">
                         Heurística afectada
                     </label>
                     <select
                         value={heuristic}
                         onChange={(e) => setHeuristic(e.target.value as HeuristicKey)}
-                        className="mt-1 w-full p-2 text-sm bg-slate-950 border border-slate-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     >
                         {HEURISTICS.map((h) => (
                             <option key={h.key} value={h.key}>
@@ -685,12 +732,12 @@ export function HeuristicsEvaluatePage() {
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-xs text-slate-300">Severidad</label>
+                <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">Severidad</label>
                     <select
                         value={severity}
                         onChange={(e) => setSeverity(e.target.value as SeverityLevel)}
-                        className="mt-1 w-full p-2 text-sm bg-slate-950 border border-slate-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     >
                         <option value="Baja">Baja</option>
                         <option value="Media">Media</option>
@@ -699,38 +746,43 @@ export function HeuristicsEvaluatePage() {
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-xs text-slate-300">
+                <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">
                         Descripción del problema
                     </label>
                     <textarea
                         value={detail}
                         onChange={(e) => setDetail(e.target.value)}
-                        rows={7}
-                        className="mt-1 w-full p-2 text-sm bg-slate-950 border border-slate-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                        rows={8}
+                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
                         placeholder="Ej: El mensaje de error no indica cómo recuperarse; el estado del pedido es ambiguo; el usuario no sabe si el cambio se guardó..."
                     />
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-2">
-                    <button
+                <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+                <div className="flex flex-col gap-3">
+                    <Button
+                        color="blue"
+                        className="w-full shadow-lg hover:shadow-xl transition-shadow"
                         onClick={handleSave}
-                        className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-xs rounded-lg"
                     >
                         Guardar problema
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        color="gray"
+                        className="w-full"
                         onClick={() => setDetail("")}
-                        className="px-3 py-2 border border-slate-600 text-xs rounded-lg hover:bg-slate-800"
                     >
                         Limpiar
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        color="success"
+                        className="w-full shadow-lg hover:shadow-xl transition-shadow text-white"
                         onClick={goToSummary}
-                        className="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-xs rounded-lg ml-auto"
                     >
                         Ver resumen
-                    </button>
+                    </Button>
                 </div>
             </aside>
         </div>
@@ -780,56 +832,80 @@ export function HeuristicsSummaryPage() {
     }
 
     return (
-        <div className="p-6">
-            <div className="flex flex-wrap items-center gap-3 mb-4">
-                <h2 className="text-xl font-semibold text-slate-50">
-                    Resumen de problemas detectados
-                </h2>
-                <div className="flex gap-2 ml-auto">
-                    <button
+        <div className="p-8">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div className="space-y-1">
+                    <h2 className="text-2xl font-semibold text-white">
+                        Resumen de problemas detectados
+                    </h2>
+                    <p className="text-sm text-gray-400">
+                        {problems.length} problema{problems.length !== 1 ? 's' : ''} registrado{problems.length !== 1 ? 's' : ''}
+                    </p>
+                </div>
+                <div className="flex gap-3">
+                    <Button
+                        color="blue"
+                        className="shadow-lg hover:shadow-xl transition-shadow"
                         onClick={exportCSV}
-                        className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-xs rounded-lg"
                     >
                         Exportar CSV
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        color="failure"
+                        className="shadow-lg hover:shadow-xl transition-shadow text-white"
                         onClick={clearAll}
-                        className="px-3 py-2 bg-red-600 hover:bg-red-700 text-xs rounded-lg"
                     >
-                        Limpiar
-                    </button>
+                        Limpiar todo
+                    </Button>
                 </div>
             </div>
 
             {problems.length === 0 && (
-                <p className="text-sm text-slate-400">
-                    No hay problemas registrados todavía. Ve a la pestaña “Evaluar
-                    interfaz” para añadir hallazgos.
-                </p>
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-8 text-center">
+                    <p className="text-gray-400">
+                        No hay problemas registrados todavía. Ve a la pestaña "Evaluar
+                        interfaz" para añadir hallazgos.
+                    </p>
+                </div>
             )}
 
-            <div className="mt-4 space-y-3">
+            <div className="space-y-4">
                 {problems.map((p) => {
                     const h = HEURISTICS.find((x) => x.key === p.heuristic);
+
+                    const severityColors = {
+                        Baja: "bg-blue-500/10 border-blue-500/30 text-blue-300",
+                        Media: "bg-yellow-500/10 border-yellow-500/30 text-yellow-300",
+                        Alta: "bg-orange-500/10 border-orange-500/30 text-orange-300",
+                        Crítica: "bg-red-500/10 border-red-500/30 text-red-300",
+                    };
+
                     return (
                         <div
                             key={p.id}
-                            className="bg-slate-900 border border-slate-800 rounded-xl p-4"
+                            className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:shadow-xl hover:border-gray-600 transition-all"
                         >
-                            <div className="flex justify-between items-start gap-3">
-                                <div>
-                                    <div className="text-sm font-semibold text-slate-50">
+                            <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
+                                <div className="space-y-1">
+                                    <div className="text-base font-semibold text-white">
                                         {h?.label ?? p.heuristic}
                                     </div>
-                                    <div className="text-[11px] text-slate-500">
-                                        {p.screenId} — {new Date(p.timestamp).toLocaleString()}
+                                    <div className="flex items-center gap-3 text-xs text-gray-500">
+                                        <span className="flex items-center gap-1">
+                                            <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
+                                            {p.screenId === "screen1" ? "Dashboard de pedidos" : "Registro / Configuración"}
+                                        </span>
+                                        <span>•</span>
+                                        <span>{new Date(p.timestamp).toLocaleString()}</span>
                                     </div>
                                 </div>
-                                <span className="text-[11px] px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/40 text-yellow-300">
+                                <span className={`px-3 py-1.5 rounded-full text-xs font-medium border ${severityColors[p.severity]}`}>
                                     {p.severity}
                                 </span>
                             </div>
-                            <div className="mt-2 text-sm text-slate-200">{p.detail}</div>
+                            <div className="text-sm text-gray-300 leading-relaxed bg-gray-900 border border-gray-700 rounded-lg p-4">
+                                {p.detail}
+                            </div>
                         </div>
                     );
                 })}

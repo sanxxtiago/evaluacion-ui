@@ -8,7 +8,7 @@ import { ProgressBar } from "../2pruebas/ProgressBar";
 import { TodoList } from "../2pruebas/TodoList";
 import { TodoModal } from "../2pruebas/TodoModal";
 import { Button, ButtonGroup, Spinner } from "flowbite-react";
-import { HiPlusCircle } from "react-icons/hi";
+import { HiCheckCircle, HiPlusCircle } from "react-icons/hi";
 import type { FittsTaskProgress } from "../../types/FittsTaskProgress";
 import type { FittsStep } from "../../types/FittsStep";
 import { computeFitts, getElementCenter, getTargetMetrics } from "../../util/Fitts";
@@ -383,20 +383,28 @@ export function FittsModelPage() {
     };
 
     return (
-        <div className="flex flex-col justify-center gap-2 p-8 text-slate-50 min-h-screen bg-slate-950">
-            <h3 className="text-3xl md:text-4xl font-bold">Modelo predictivo de Fitts</h3>
-            <p className="text-sm text-slate-300 max-w-2xl">
-                En este módulo simulas una evaluación heurística sobre pantallas de
-                ejemplo. Interactúa con los mockups, detecta problemas de usabilidad,
-                asígnales una heurística y una severidad y luego revisa el resumen de
-                hallazgos.
-            </p>
-            {/* interfaz normal mientras no termine */}
-            <div className="flex flex-col bg-slate-900/60 border border-slate-800 rounded-2xl shadow-lg p-5 mt-4 gap-2">
-                <h2 className="text-xl font-semibold text-slate-50">(Simulación) Completa las siguientes tareas:</h2>                <PredictiveTaskList tasks={progressTasks} />
+        <div className="flex flex-col gap-6 p-8 min-h-screen bg-gray-900">
+            {/* Header Section */}
+            <div className="space-y-2">
+                <h3 className="text-3xl md:text-4xl font-bold text-white">Modelo predictivo de Fitts</h3>
+                <p className="text-sm text-gray-400 max-w-3xl leading-relaxed">
+                    En este módulo simulas una evaluación heurística sobre pantallas de
+                    ejemplo. Interactúa con los mockups, detecta problemas de usabilidad,
+                    asígnales una heurística y una severidad y luego revisa el resumen de
+                    hallazgos.
+                </p>
+            </div>
+
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+            {/* Simulation Control Card */}
+            <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl p-6 space-y-4">
+                <h2 className="text-xl font-semibold text-white">(Simulación) Completa las siguientes tareas</h2>
+                <PredictiveTaskList tasks={progressTasks} />
                 <ProgressBar progressPercent={progressPercent} />
                 <Button
-                    color="alternative"
+                    color="blue"
+                    className="shadow-lg hover:shadow-xl transition-shadow"
                     disabled={simulationRunning}
                     onClick={() => {
                         resetTaskList();
@@ -408,90 +416,100 @@ export function FittsModelPage() {
                         setFinishTime(null);
                     }}
                 >
-                    Iniciar simulación
+                    {simulationRunning ? 'Simulación en curso...' : 'Iniciar simulación'}
                 </Button>
-
             </div>
-            <hr class="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10 m-4" />
+
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
             {/* si ya terminó → mostrar métricas */}
             {showFinalScreen ? (
-                <div className="text-center text-amber-100 flex flex-col gap-4 mt-6">
-                    <h2 className="text-3xl font-semibold">¡100% completado!</h2>
+                <div className="flex flex-col items-center gap-6 mt-8">
+                    <div className="text-center space-y-3">
+                        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500/20 rounded-full mb-4">
+                            <HiCheckCircle className="w-12 h-12 text-green-400" />
+                        </div>
+                        <h2 className="text-4xl font-bold text-white">¡100% completado!</h2>
+                        <p className="text-lg text-gray-400">Resultados de la evaluación</p>
+                    </div>
 
-                    <p className="text-lg">Resultados de la evaluación:</p>
-
-                    <div className="bg-slate-800 p-4 rounded-lg text-left mx-auto w-fit shadow-lg shadow-amber-900/20">
-                        <p>⏱️ Tiempo total: {(finishTime! - startTime) / 1000}s</p>
-                        <p>🖱️ Clics realizados: {clicks}</p>
-                        <p>❌ Errores cometidos: {errors}</p>
+                    <div className="bg-gray-800 border border-gray-700 rounded-xl p-8 w-full max-w-md space-y-4 shadow-2xl">
+                        <div className="flex items-center justify-between py-3 border-b border-gray-700">
+                            <span className="text-gray-400 flex items-center gap-2">
+                                <span className="text-2xl">⏱️</span> Tiempo total
+                            </span>
+                            <span className="text-xl font-bold text-white">
+                                {((finishTime! - startTime) / 1000).toFixed(2)}s
+                            </span>
+                        </div>
+                        <div className="flex items-center justify-between py-3 border-b border-gray-700">
+                            <span className="text-gray-400 flex items-center gap-2">
+                                <span className="text-2xl">🖱️</span> Clics realizados
+                            </span>
+                            <span className="text-xl font-bold text-white">{clicks}</span>
+                        </div>
+                        <div className="flex items-center justify-between py-3">
+                            <span className="text-gray-400 flex items-center gap-2">
+                                <span className="text-2xl">❌</span> Errores cometidos
+                            </span>
+                            <span className="text-xl font-bold text-white">{errors}</span>
+                        </div>
                     </div>
                 </div>
             ) : loadingFinish ? (
-
                 /* spinner 1 segundo */
-                <div className="flex flex-col text-center gap-3">
-
-                    <h3 className="text-green-400 text-3xl font-bold text-heading">Cargando resultados...</h3>
+                <div className="flex flex-col items-center gap-6 mt-12">
                     <Spinner color="success" size="xl" aria-label="Loading final..." />
+                    <h3 className="text-green-400 text-2xl font-semibold">Cargando resultados...</h3>
                 </div>
-
             ) : (
-                <>
+                /* Interfaz de TODO */
+                <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl p-6 space-y-6">
+                    <ButtonGroup>
+                        <Button
+                            data-fitts="add"
+                            id="btn-add-todo"
+                            className="shadow-lg hover:shadow-xl transition-shadow"
+                            color="blue"
+                            onClick={(todo) => { registerClick(); handleCreateTask(todo); }}
+                        >
+                            <HiPlusCircle className="mr-2 h-5 w-5" />
+                            Agregar TODO
+                        </Button>
+                    </ButtonGroup>
 
-                    <div className="flex flex-col bg-slate-900/60 border border-slate-800 rounded-2xl shadow-lg p-5 gap-5">
-                        <ButtonGroup>
-                            <Button
-                                // disabled={simulationRunning}
-                                data-fitts="add"
-                                id="btn-add-todo"
-                                className="shadow-lg shadow-gray-950"
-                                color="alternative"
-                                onClick={(todo) => { registerClick(); handleCreateTask(todo); }}
-                            >
-                                <HiPlusCircle className="me-2 h-5 w-5" />
-                                Agregar TODO
-                            </Button>
-                        </ButtonGroup>
+                    <TodoList
+                        Todos={todos}
+                        handleCompletedTask={(id) => { registerClick(); handleCompletedTodo(id); }}
+                        handleEditTask={(todo) => { registerClick(); handleEditTask(todo); }}
+                        handleDeleteTask={(todo) => { registerClick(); handleDeleteTask(todo); }}
+                        disabled={simulationRunning}
+                    />
 
-                        <TodoList
-                            Todos={todos}
-                            handleCompletedTask={(id) => { registerClick(); handleCompletedTodo(id); }}
-                            handleEditTask={(todo) => { registerClick(); handleEditTask(todo); }}
-                            handleDeleteTask={(todo) => { registerClick(); handleDeleteTask(todo); }}
-                            disabled={simulationRunning}
-                        />
-
-                        <TodoModal
-                            todo={selectedTodo}
-                            action={modalAction}
-                            openModal={openModal}
-                            setOpenModal={setOpenModal}
-                            onConfirmCreate={(todo) => { registerClick(); onConfirmCreate(todo); }}
-                            onConfirmEdit={(todo) => { registerClick(); onConfirmEdit(todo); }}
-                            onConfirmDelete={() => { registerClick(); onConfirmDelete(); }}
-                            completeTask={completeTask}
-                        />
-                    </div>
-                </>
+                    <TodoModal
+                        todo={selectedTodo}
+                        action={modalAction}
+                        openModal={openModal}
+                        setOpenModal={setOpenModal}
+                        onConfirmCreate={(todo) => { registerClick(); onConfirmCreate(todo); }}
+                        onConfirmEdit={(todo) => { registerClick(); onConfirmEdit(todo); }}
+                        onConfirmDelete={() => { registerClick(); onConfirmDelete(); }}
+                        completeTask={completeTask}
+                    />
+                </div>
             )}
+
+            {/* Cursor de simulación */}
             {simulationRunning && (
                 <div
-
                     id="cursor-sim"
+                    className="fixed w-4 h-4 rounded-full bg-red-500 pointer-events-none z-[9999] shadow-lg shadow-red-500/50 animate-pulse"
                     style={{
-                        position: "fixed",
-                        width: "14px",
-                        height: "14px",
-                        borderRadius: "50%",
-                        background: "red",
-                        pointerEvents: "none",
                         top: "100px",
                         left: "100px",
-                        zIndex: 9999,
                     }}
-                ></div>
+                />
             )}
-
         </div>
     );
 

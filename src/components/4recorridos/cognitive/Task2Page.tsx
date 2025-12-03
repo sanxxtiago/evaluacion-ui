@@ -5,6 +5,7 @@ import { readLS, writeLS, SESSIONS_KEY, type Session } from "./cognitiveStore";
 import { useTimer } from "./useTimer";
 import { useTracker } from "./useTracker";
 import { useErrors } from "./useErrors";
+import { Button } from "flowbite-react";
 
 type ThemeOption = "claro" | "oscuro" | "auto";
 type LanguageOption = "es" | "en" | "pt";
@@ -62,37 +63,41 @@ export default function Task2Page() {
     }
 
     return (
-        <div className="p-8 text-slate-50 min-h-screen bg-slate-950">
-            <div className="max-w-5xl mx-auto bg-slate-900/70 border border-slate-700 rounded-2xl p-6 space-y-6">
-                <div className="flex justify-between items-start gap-4">
-                    <div>
-                        <h2 className="text-xl font-semibold">
+        <div className="flex flex-col gap-6 p-8 min-h-screen bg-gray-900">
+            <div className="max-w-6xl mx-auto w-full bg-gray-800 border border-gray-700 rounded-xl shadow-xl p-8 space-y-6">
+                {/* Header */}
+                <div className="flex flex-wrap justify-between items-start gap-4">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-semibold text-white">
                             Tarea 2: Configurar preferencias
                         </h2>
-                        <p className="text-xs text-slate-400 mt-1 max-w-xl">
+                        <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
                             Objetivo: configurar la cuenta para un usuario que trabaja de
                             noche, habla español y necesita recibir resúmenes semanales por
                             correo.
                         </p>
                     </div>
-                    <div className="text-xs text-slate-400">
-                        Tiempo:{" "}
-                        <span className="text-slate-100">{timer.durationSec}s</span>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <span className="text-xs text-gray-400">Tiempo:</span>
+                        <span className="text-lg font-bold text-white">{timer.durationSec}s</span>
                     </div>
                 </div>
 
+                <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+                {/* Grid de configuraciones */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Columna 1: Apariencia */}
-                    <div className="bg-slate-950 border border-slate-700 rounded-xl p-4 text-sm space-y-3">
-                        <div className="text-xs text-slate-400 uppercase tracking-wide mb-1">
+                    <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 space-y-5">
+                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                             Apariencia
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="block text-xs text-slate-300 mb-1">
+                        <div className="space-y-3">
+                            <label className="block text-sm font-medium text-gray-300">
                                 Tema de la interfaz
                             </label>
-                            <div className="grid grid-cols-3 gap-2 text-xs">
+                            <div className="grid grid-cols-3 gap-2">
                                 {(["claro", "oscuro", "auto"] as ThemeOption[]).map((opt) => (
                                     <button
                                         key={opt}
@@ -102,23 +107,23 @@ export default function Task2Page() {
                                                 `Usuario selecciona tema: ${opt.toUpperCase()}`
                                             );
                                         }}
-                                        className={`px-2 py-2 rounded-lg border ${theme === opt
-                                            ? "border-blue-500 bg-blue-600/20"
-                                            : "border-slate-700 bg-slate-900 hover:border-slate-500"
+                                        className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${theme === opt
+                                            ? "border-blue-500 bg-blue-600 text-white shadow-lg"
+                                            : "border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600 hover:bg-gray-750"
                                             }`}
                                     >
                                         {opt === "claro"
                                             ? "Claro"
                                             : opt === "oscuro"
                                                 ? "Oscuro"
-                                                : "Automático"}
+                                                : "Auto"}
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="block text-xs text-slate-300 mb-1">
+                        <div className="space-y-3">
+                            <label className="block text-sm font-medium text-gray-300">
                                 Idioma principal
                             </label>
                             <select
@@ -128,7 +133,7 @@ export default function Task2Page() {
                                     setLanguage(value);
                                     tracker.addStep(`Usuario cambia idioma a: ${value}`);
                                 }}
-                                className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                             >
                                 <option value="es">Español</option>
                                 <option value="en">Inglés</option>
@@ -138,96 +143,123 @@ export default function Task2Page() {
                     </div>
 
                     {/* Columna 2: Notificaciones */}
-                    <div className="bg-slate-950 border border-slate-700 rounded-xl p-4 text-sm space-y-3">
-                        <div className="text-xs text-slate-400 uppercase tracking-wide mb-1">
+                    <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 space-y-5">
+                        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                             Notificaciones
                         </div>
 
-                        <label className="flex items-center justify-between gap-2 text-xs bg-slate-900 rounded-lg px-3 py-2 border border-slate-700">
-                            <span>Notificaciones por correo</span>
-                            <input
-                                type="checkbox"
-                                checked={emailNotif}
-                                onChange={(e) => {
-                                    setEmailNotif(e.target.checked);
-                                    tracker.addStep(
-                                        `Usuario ${e.target.checked ? "activa" : "desactiva"
-                                        } notificaciones por correo`
-                                    );
-                                }}
-                            />
-                        </label>
+                        <div className="space-y-3">
+                            <label className="flex items-center justify-between gap-3 bg-gray-800 rounded-lg px-4 py-3 border border-gray-700 cursor-pointer hover:border-gray-600 transition-all group">
+                                <span className="text-sm text-gray-300 group-hover:text-white">
+                                    Notificaciones por correo
+                                </span>
+                                <input
+                                    type="checkbox"
+                                    checked={emailNotif}
+                                    onChange={(e) => {
+                                        setEmailNotif(e.target.checked);
+                                        tracker.addStep(
+                                            `Usuario ${e.target.checked ? "activa" : "desactiva"
+                                            } notificaciones por correo`
+                                        );
+                                    }}
+                                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                                />
+                            </label>
 
-                        <label className="flex items-center justify-between gap-2 text-xs bg-slate-900 rounded-lg px-3 py-2 border border-slate-700">
-                            <span>Notificaciones push en el navegador</span>
-                            <input
-                                type="checkbox"
-                                checked={pushNotif}
-                                onChange={(e) => {
-                                    setPushNotif(e.target.checked);
-                                    tracker.addStep(
-                                        `Usuario ${e.target.checked ? "activa" : "desactiva"
-                                        } notificaciones push`
-                                    );
-                                }}
-                            />
-                        </label>
+                            <label className="flex items-center justify-between gap-3 bg-gray-800 rounded-lg px-4 py-3 border border-gray-700 cursor-pointer hover:border-gray-600 transition-all group">
+                                <span className="text-sm text-gray-300 group-hover:text-white">
+                                    Notificaciones push
+                                </span>
+                                <input
+                                    type="checkbox"
+                                    checked={pushNotif}
+                                    onChange={(e) => {
+                                        setPushNotif(e.target.checked);
+                                        tracker.addStep(
+                                            `Usuario ${e.target.checked ? "activa" : "desactiva"
+                                            } notificaciones push`
+                                        );
+                                    }}
+                                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                                />
+                            </label>
 
-                        <label className="flex items-center justify-between gap-2 text-xs bg-slate-900 rounded-lg px-3 py-2 border border-slate-700">
-                            <span>Resumen semanal por correo</span>
-                            <input
-                                type="checkbox"
-                                checked={weeklySummary}
-                                onChange={(e) => {
-                                    setWeeklySummary(e.target.checked);
-                                    tracker.addStep(
-                                        `Usuario ${e.target.checked ? "activa" : "desactiva"
-                                        } resumen semanal`
-                                    );
-                                }}
-                            />
-                        </label>
+                            <label className="flex items-center justify-between gap-3 bg-gray-800 rounded-lg px-4 py-3 border border-gray-700 cursor-pointer hover:border-gray-600 transition-all group">
+                                <span className="text-sm text-gray-300 group-hover:text-white">
+                                    Resumen semanal por correo
+                                </span>
+                                <input
+                                    type="checkbox"
+                                    checked={weeklySummary}
+                                    onChange={(e) => {
+                                        setWeeklySummary(e.target.checked);
+                                        tracker.addStep(
+                                            `Usuario ${e.target.checked ? "activa" : "desactiva"
+                                            } resumen semanal`
+                                        );
+                                    }}
+                                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                                />
+                            </label>
+                        </div>
 
-                        <p className="text-[11px] text-slate-500 mt-2">
-                            El usuario objetivo necesita recibir un resumen semanal por
-                            correo. Asegúrate de que esta opción esté alineada con el
-                            escenario planteado.
-                        </p>
+                        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                            <p className="text-xs text-blue-300 leading-relaxed">
+                                💡 El usuario necesita recibir un resumen semanal por
+                                correo. Asegúrate de activar esta opción.
+                            </p>
+                        </div>
                     </div>
 
                     {/* Columna 3: Contexto y acciones */}
-                    <div className="bg-slate-950 border border-slate-700 rounded-xl p-4 text-sm flex flex-col justify-between">
-                        <div className="space-y-2 text-xs text-slate-300">
-                            <p>
-                                El usuario trabaja de noche y prefiere un entorno visual que
-                                reduzca el brillo. Además, su idioma de trabajo es el español y
-                                espera recibir un correo semanal con un resumen de actividad.
-                            </p>
-                            <p className="text-slate-400">
-                                Ajusta los parámetros de apariencia y notificaciones para
-                                cumplir con este escenario antes de guardar.
-                            </p>
-                            {!isConfigCorrect && (
-                                <p className="text-[11px] text-amber-300 mt-2">
-                                    La configuración actual todavía no coincide completamente con
-                                    el escenario descrito.
+                    <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 flex flex-col justify-between space-y-5">
+                        <div className="space-y-4">
+                            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                Escenario
+                            </div>
+
+                            <div className="space-y-3 text-sm text-gray-300">
+                                <p className="leading-relaxed">
+                                    El usuario trabaja de noche y prefiere un entorno visual que
+                                    reduzca el brillo. Además, su idioma de trabajo es el español y
+                                    espera recibir un correo semanal con un resumen de actividad.
                                 </p>
+                                <p className="text-gray-400 leading-relaxed">
+                                    Ajusta los parámetros de apariencia y notificaciones para
+                                    cumplir con este escenario antes de guardar.
+                                </p>
+                            </div>
+
+                            {!isConfigCorrect && (
+                                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                                    <p className="text-xs text-yellow-300">
+                                        ⚠️ La configuración actual todavía no coincide completamente con
+                                        el escenario descrito.
+                                    </p>
+                                </div>
                             )}
                         </div>
 
-                        <div className="flex flex-wrap gap-2 pt-4">
-                            <button
-                                onClick={handleSave}
-                                className="px-3 py-2 text-xs bg-emerald-600 hover:bg-emerald-700 rounded-lg"
-                            >
-                                Guardar configuración
-                            </button>
-                            <button
-                                onClick={() => navigate("/roads")}
-                                className="px-3 py-2 text-xs border border-slate-600 rounded-lg hover:bg-slate-800"
-                            >
-                                Cancelar y volver
-                            </button>
+                        <div className="space-y-3">
+                            <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+                            <div className="flex flex-col gap-3">
+                                <Button
+                                    color="success"
+                                    className="w-full shadow-lg hover:shadow-xl  hover:bg-sky-900 transition-shadow text-white"
+                                    onClick={handleSave}
+                                >
+                                    Guardar configuración
+                                </Button>
+                                <Button
+                                    color="gray"
+                                    className="w-full shadow-lg hover:shadow-xl transition-shadow"
+                                    onClick={() => navigate("/roads/cognitivo")}
+                                >
+                                    Cancelar y volver
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>

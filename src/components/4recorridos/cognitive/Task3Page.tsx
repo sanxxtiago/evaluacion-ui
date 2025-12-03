@@ -5,6 +5,7 @@ import { readLS, writeLS, SESSIONS_KEY, type Session } from "./cognitiveStore";
 import { useTimer } from "./useTimer";
 import { useTracker } from "./useTracker";
 import { useErrors } from "./useErrors";
+import { Button } from "flowbite-react";
 
 type Area = "soporte" | "finanzas" | "rrhh";
 
@@ -80,31 +81,35 @@ export default function Task3Page() {
     }
 
     return (
-        <div className="p-8 text-slate-50 min-h-screen bg-slate-950">
-            <div className="max-w-5xl mx-auto bg-slate-900/70 border border-slate-700 rounded-2xl p-6 space-y-6">
-                <div className="flex justify-between items-start gap-4">
-                    <div>
-                        <h2 className="text-xl font-semibold">
+        <div className="flex flex-col gap-6 p-8 min-h-screen bg-gray-900">
+            <div className="max-w-6xl mx-auto w-full bg-gray-800 border border-gray-700 rounded-xl shadow-xl p-8 space-y-6">
+                {/* Header */}
+                <div className="flex flex-wrap justify-between items-start gap-4">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-semibold text-white">
                             Tarea 3: Enviar un mensaje al área correcta
                         </h2>
-                        <p className="text-xs text-slate-400 mt-1 max-w-xl">
+                        <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
                             Objetivo: enviar un mensaje al área de{" "}
-                            <b>Soporte</b> con un asunto claro y un mensaje de al menos{" "}
-                            <b>30 caracteres</b>.
+                            <b className="text-blue-400">Soporte</b> con un asunto claro y un mensaje de al menos{" "}
+                            <b className="text-blue-400">30 caracteres</b>.
                         </p>
                     </div>
-                    <div className="text-xs text-slate-400">
-                        Tiempo:{" "}
-                        <span className="text-slate-100">{timer.durationSec}s</span>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg">
+                        <span className="text-xs text-gray-400">Tiempo:</span>
+                        <span className="text-lg font-bold text-white">{timer.durationSec}s</span>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-[2fr,1.1fr] gap-6 text-sm">
+                <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+                {/* Grid principal */}
+                <div className="grid grid-cols-1 lg:grid-cols-[2fr,1fr] gap-6">
                     {/* Formulario */}
-                    <div className="bg-slate-950 border border-slate-700 rounded-xl p-4 space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-xs text-slate-300 mb-1">
+                    <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="space-y-2">
+                                <label className="block text-sm font-medium text-gray-300">
                                     Área de destino
                                 </label>
                                 <select
@@ -116,23 +121,24 @@ export default function Task3Page() {
                                             `Usuario cambia área de destino a: ${value}`
                                         );
                                     }}
-                                    className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                 >
                                     <option value="soporte">Soporte</option>
                                     <option value="finanzas">Finanzas</option>
                                     <option value="rrhh">Recursos Humanos</option>
                                 </select>
                                 {!isValidArea && (
-                                    <p className="text-[11px] text-amber-300 mt-1">
-                                        Para esta tarea, el mensaje debe dirigirse al área de
-                                        Soporte.
-                                    </p>
+                                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-2">
+                                        <p className="text-xs text-yellow-300">
+                                            ⚠️ Para esta tarea, el mensaje debe dirigirse al área de Soporte.
+                                        </p>
+                                    </div>
                                 )}
                             </div>
 
-                            <div>
-                                <label className="block text-xs text-slate-300 mb-1">
-                                    Código de referencia (opcional)
+                            <div className="space-y-2">
+                                <label className="block text-sm font-medium text-gray-300">
+                                    Código de referencia <span className="text-gray-500">(opcional)</span>
                                 </label>
                                 <input
                                     value={refCode}
@@ -142,14 +148,14 @@ export default function Task3Page() {
                                             "Usuario escribe en el campo de referencia opcional"
                                         );
                                     }}
-                                    className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     placeholder="Ej: INC-2039"
                                 />
                             </div>
                         </div>
 
-                        <div>
-                            <label className="block text-xs text-slate-300 mb-1">
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-300">
                                 Asunto
                             </label>
                             <input
@@ -158,18 +164,20 @@ export default function Task3Page() {
                                     setSubject(e.target.value);
                                     tracker.addStep("Usuario escribe en el campo Asunto");
                                 }}
-                                className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                 placeholder="Ej: Error al guardar mis cambios de perfil"
                             />
                             {!isValidSubject && (
-                                <p className="text-[11px] text-amber-300 mt-1">
-                                    Es necesario un asunto breve que resuma el problema.
-                                </p>
+                                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-2">
+                                    <p className="text-xs text-yellow-300">
+                                        ⚠️ Es necesario un asunto breve que resuma el problema.
+                                    </p>
+                                </div>
                             )}
                         </div>
 
-                        <div>
-                            <label className="block text-xs text-slate-300 mb-1">
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-300">
                                 Mensaje
                             </label>
                             <textarea
@@ -178,18 +186,27 @@ export default function Task3Page() {
                                     setMessage(e.target.value);
                                     tracker.addStep("Usuario escribe en el campo Mensaje");
                                 }}
-                                rows={6}
-                                className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                                rows={7}
+                                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
                                 placeholder="Describe el problema con suficiente detalle para que el equipo de soporte pueda entender qué ocurre..."
                             />
-                            {!isValidMessage && (
-                                <p className="text-[11px] text-amber-300 mt-1">
-                                    El mensaje debe tener al menos 30 caracteres para ser claro.
-                                </p>
-                            )}
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    {!isValidMessage && (
+                                        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-2 inline-block">
+                                            <p className="text-xs text-yellow-300">
+                                                ⚠️ El mensaje debe tener al menos 30 caracteres.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                                <span className="text-xs text-gray-500">
+                                    {message.length} caracteres
+                                </span>
+                            </div>
                         </div>
 
-                        <label className="flex items-center gap-2 text-xs text-slate-300">
+                        <label className="flex items-center gap-3 bg-gray-800 rounded-lg px-4 py-3 border border-gray-700 cursor-pointer hover:border-gray-600 transition-all group">
                             <input
                                 type="checkbox"
                                 checked={urgent}
@@ -200,57 +217,79 @@ export default function Task3Page() {
                                         }`
                                     );
                                 }}
+                                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
                             />
-                            Marcar como urgente
+                            <span className="text-sm text-gray-300 group-hover:text-white">
+                                Marcar como urgente
+                            </span>
                         </label>
 
-                        <div className="flex flex-wrap gap-2 pt-3">
-                            <button
+                        <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+                        <div className="flex flex-wrap gap-3">
+                            <Button
+                                color="blue"
+                                className="shadow-lg hover:shadow-xl transition-shadow"
                                 onClick={handleSend}
-                                className="px-3 py-2 text-xs bg-blue-600 hover:bg-blue-700 rounded-lg"
                             >
                                 Enviar mensaje
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                                color="failure"
+                                outline
+                                className="text-red-400 hover:text-white"
                                 onClick={() => {
                                     errors.addError(
                                         "Usuario abandona la tarea sin enviar el mensaje"
                                     );
                                     finish("Usuario canceló la tarea sin enviar mensaje");
                                 }}
-                                className="px-3 py-2 text-xs border border-slate-600 rounded-lg hover:bg-slate-800"
                             >
                                 Cancelar y terminar tarea
-                            </button>
-                            <button
-                                onClick={() => navigate("/roads")}
-                                className="px-3 py-2 text-xs border border-slate-600 rounded-lg hover:bg-slate-800 ml-auto"
+                            </Button>
+                            <Button
+                                color="gray"
+                                className="ml-auto"
+                                onClick={() => navigate("/roads/cognitivo")}
                             >
                                 Volver al dashboard
-                            </button>
+                            </Button>
                         </div>
                     </div>
 
                     {/* Panel lateral: instrucciones */}
-                    <div className="bg-slate-950 border border-slate-700 rounded-xl p-4 text-xs text-slate-300 space-y-3">
-                        <div className="font-semibold text-sm mb-1">
-                            Escenario de la tarea
+                    <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 space-y-4">
+                        <div className="space-y-2">
+                            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                Escenario de la tarea
+                            </div>
+                            <h3 className="font-semibold text-base text-white">
+                                Reporte de problema técnico
+                            </h3>
                         </div>
-                        <p>
-                            Un usuario detectó un problema técnico en la plataforma y desea
-                            reportarlo al área correcta. El mensaje debe llegar al equipo de{" "}
-                            <b>Soporte</b>, no a Finanzas ni a Recursos Humanos.
-                        </p>
-                        <p className="text-slate-400">
-                            Procura que el asunto sea claro y que el cuerpo del mensaje
-                            entregue suficiente contexto (al menos 30 caracteres) para que
-                            Soporte pueda entender qué está fallando.
-                        </p>
-                        <p className="text-slate-500">
-                            Puedes usar el código de referencia si el problema está asociado a
-                            un incidente previo, pero no es obligatorio para completar la
-                            tarea.
-                        </p>
+
+                        <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+
+                        <div className="space-y-3 text-sm text-gray-300">
+                            <p className="leading-relaxed">
+                                Un usuario detectó un problema técnico en la plataforma y desea
+                                reportarlo al área correcta. El mensaje debe llegar al equipo de{" "}
+                                <b className="text-blue-400">Soporte</b>, no a Finanzas ni a Recursos Humanos.
+                            </p>
+                            <p className="text-gray-400 leading-relaxed">
+                                Procura que el asunto sea claro y que el cuerpo del mensaje
+                                entregue suficiente contexto (al menos 30 caracteres) para que
+                                Soporte pueda entender qué está fallando.
+                            </p>
+                        </div>
+
+                        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                            <p className="text-xs text-blue-300 leading-relaxed">
+                                💡 Puedes usar el código de referencia si el problema está asociado a
+                                un incidente previo, pero no es obligatorio para completar la
+                                tarea.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
