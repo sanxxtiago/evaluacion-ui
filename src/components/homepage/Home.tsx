@@ -44,7 +44,7 @@ export function Home() {
             id: "roads",
             title: "4. Recorridos cognitivos",
             icon: HiLightBulb,
-            to: "/roads",
+            to: "/roads/cognitivo",
             desc:
                 "Módulo interactivo donde la persona debe completar tareas específicas en una interfaz simulada, mientras se registran pasos, errores y feedback.",
             focus:
