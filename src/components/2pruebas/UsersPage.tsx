@@ -5,7 +5,7 @@ import TodoData from "../../resources/json/TODO.json";
 import type { Todo } from "../../types/Todo";
 import { TaskList } from "./TaskList";
 import { ProgressBar } from "./ProgressBar";
-import { TodoList } from "./TodoList";
+import { TodoTable } from "./TodoTable";
 import { TodoModal } from "./TodoModal";
 import { Button, ButtonGroup, Spinner } from "flowbite-react";
 import { HiPlusCircle, HiCheckCircle } from "react-icons/hi";
@@ -200,7 +200,7 @@ export function Users() {
                         </Button>
                     </ButtonGroup>
 
-                    <TodoList
+                    <TodoTable
                         Todos={todos}
                         handleCompletedTask={(id) => { registerClick(); handleCompletedTodo(id); }}
                         handleEditTask={(todo) => { registerClick(); handleEditTask(todo); }}

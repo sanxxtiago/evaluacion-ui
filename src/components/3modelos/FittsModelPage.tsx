@@ -5,7 +5,7 @@ import TodoData from "../../resources/json/TODO.json";
 import type { Todo } from "../../types/Todo";
 import { PredictiveTaskList } from "./PredictiveTaskList";
 import { ProgressBar } from "../2pruebas/ProgressBar";
-import { TodoList } from "../2pruebas/TodoList";
+import { TodoTable } from "../2pruebas/TodoTable";
 import { TodoModal } from "../2pruebas/TodoModal";
 import { Button, ButtonGroup, Spinner } from "flowbite-react";
 import { HiCheckCircle, HiPlusCircle } from "react-icons/hi";
@@ -478,7 +478,7 @@ export function FittsModelPage() {
                         </Button>
                     </ButtonGroup>
 
-                    <TodoList
+                    <TodoTable
                         Todos={todos}
                         handleCompletedTask={(id) => { registerClick(); handleCompletedTodo(id); }}
                         handleEditTask={(todo) => { registerClick(); handleEditTask(todo); }}

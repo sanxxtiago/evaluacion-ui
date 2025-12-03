@@ -11,7 +11,7 @@ type Props = {
     disabled?: boolean;
 }
 
-export function TodoList({ Todos, handleCompletedTask, handleEditTask, handleDeleteTask, disabled }: Props) {
+export function TodoTable({ Todos, handleCompletedTask, handleEditTask, handleDeleteTask, disabled }: Props) {
 
     return (
         <div className="overflow-x-auto  shadow-xl shadow-black">
